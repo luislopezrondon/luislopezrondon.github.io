@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Luis Lopez Rondon | Electrical Engineering</title>
+  <meta name="description" content="Portfolio of Luis Lopez Rondon, Electrical Engineering student at USF focused on PCB design, embedded systems, and robotics.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f7f7f5;
+      --card: #ffffff;
+      --text: #1a1a1a;
+      --muted: #5c5c5c;
+      --accent: #0a7d5a;
+      --border: #e2e2de;
+      --thumb: #e8ece9;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f1211;
+        --card: #171b1a;
+        --text: #eceeed;
+        --muted: #9aa3a0;
+        --accent: #3ddc97;
+        --border: #262c2a;
+        --thumb: #1f2624;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Inter", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+
+    nav {
+      position: sticky; top: 0; z-index: 10;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+    nav .wrap {
+      display: flex; justify-content: space-between; align-items: center;
+      height: 60px;
+    }
+    nav .logo { font-weight: 800; color: var(--text); }
+    nav ul { display: flex; gap: 20px; list-style: none; }
+    nav ul a { color: var(--muted); font-size: 0.95rem; }
+
+    .hero { padding: 90px 0 60px; }
+    .mono {
+      font-family: "JetBrains Mono", monospace;
+      color: var(--accent); font-size: 0.9rem; margin-bottom: 12px;
+    }
+    .hero h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); line-height: 1.1; font-weight: 800; }
+    .hero p { color: var(--muted); font-size: 1.15rem; max-width: 620px; margin: 18px 0 28px; }
+    .btns { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn {
+      padding: 10px 20px; border-radius: 8px; font-weight: 600;
+      border: 1px solid var(--accent);
+    }
+    .btn.primary { background: var(--accent); color: var(--bg); }
+    .btn:hover { text-decoration: none; opacity: 0.85; }
+
+    section { padding: 50px 0; }
+    h2 { font-size: 1.8rem; margin-bottom: 24px; }
+
+    .grid {
+      display: grid; gap: 22px;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+      display: flex; flex-direction: column;
+      transition: transform 0.15s ease;
+    }
+    .card:hover { transform: translateY(-3px); }
+    .thumb {
+      aspect-ratio: 16 / 10; background: var(--thumb);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem;
+    }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .card-body { padding: 18px; flex: 1; display: flex; flex-direction: column; }
+    .card h3 { font-size: 1.15rem; margin-bottom: 6px; }
+    .status {
+      display: inline-block; font-size: 0.75rem; font-weight: 600;
+      padding: 2px 8px; border-radius: 99px; margin-bottom: 10px;
+      border: 1px solid var(--border); color: var(--muted);
+    }
+    .card p { color: var(--muted); font-size: 0.95rem; flex: 1; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0; }
+    .tags span {
+      font-family: "JetBrains Mono", monospace; font-size: 0.75rem;
+      background: var(--thumb); padding: 3px 8px; border-radius: 6px;
+    }
+    .card .link { font-weight: 600; font-size: 0.95rem; }
+
+    .skills {
+      display: grid; gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+    .skills div {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 18px;
+    }
+    .skills h3 { font-size: 1rem; margin-bottom: 8px; }
+    .skills p { color: var(--muted); font-size: 0.95rem; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 30px 0; color: var(--muted); font-size: 0.9rem; text-align: center;
+    }
+    @media (max-width: 560px) { nav ul { gap: 14px; } nav ul li:first-child { display: none; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a href="#" class="logo">Luis Lopez Rondon</a>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero wrap">
+  <div class="mono">// electrical engineering @ usf</div>
+  <h1>I design circuits and PCBs<br>that make robots move.</h1>
+  <p>Electrical Engineering student at the University of South Florida and Electronics &amp; Circuitry Lead for IEEE at USF's EXO exoskeleton team. I work on embedded systems, power electronics, and robotics.</p>
+  <div class="btns">
+    <a class="btn primary" href="#projects">View Projects</a>
+    <a class="btn" href="resume.pdf" target="_blank">Resume</a>
+    <a class="btn" href="https://github.com/YOUR-USERNAME" target="_blank">GitHub</a>
+  </div>
+</header>
+
+<section id="about" class="wrap">
+  <h2>About</h2>
+  <p style="color: var(--muted); max-width: 720px;">
+    I got into hardware by wiring flex sensors and servos on a breadboard, and I haven't stopped since.
+    These days I design custom PCBs in Altium, work through power and safety systems for a 48V exoskeleton,
+    and teach newer IEEE members the basics of PCB design. I'm most interested in embedded and robotics
+    engineering, especially where hardware meets control systems.
+  </p>
+</section>
+
+<section id="projects" class="wrap">
+  <h2>Projects</h2>
+  <div class="grid">
+
+    <article class="card">
+      <div class="thumb">🦿<img src="images/exoskeleton.jpg" alt="Exoskeleton leg" onerror="this.remove()"></div>
+      <div class="card-body">
+        <span class="status">In progress · Team project</span>
+        <h3>EXO Exoskeleton Leg</h3>
+        <p>Leading electrical design for an exoskeleton driven by 48V CubeMars AK80-9 actuators: battery selection, DC-DC power rails, and a hardware e-stop that cuts motor power while keeping control electronics alive.</p>
+        <div class="tags"><span>48V power</span><span>E-stop</span><span>Jetson Nano</span><span>Teensy</span></div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="thumb">🤖<img src="images/robotic-hand.jpg" alt="Robotic hand" onerror="this.remove()"></div>
+      <div class="card-body">
+        <span class="status">In progress</span>
+        <h3>Mimetic Robotic Hand</h3>
+        <p>A flex-sensor data glove that controls a five-servo robotic hand in real time, running on a custom PCB with onboard buck regulation from a 3S LiPo.</p>
+        <div class="tags"><span>ESP32-S3</span><span>PCA9685</span><span>Altium</span></div>
+        <a class="link" href="https://github.com/YOUR-USERNAME/robotic-hand" target="_blank">View on GitHub →</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="thumb">🥄<img src="images/pid-spoon.jpg" alt="PID spoon PCB" onerror="this.remove()"></div>
+      <div class="card-body">
+        <span class="status">In progress</span>
+        <h3>PID Tremor-Stabilizing Spoon</h3>
+        <p>A handheld spoon that counteracts Parkinson's tremors with PID control. Custom single-cell 18650 PCB with charging and protection. Also the basis for an Altium workshop I run for IEEE.</p>
+        <div class="tags"><span>ESP32-C3</span><span>PID control</span><span>Altium</span></div>
+        <a class="link" href="https://github.com/YOUR-USERNAME/pid-spoon" target="_blank">View on GitHub →</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="thumb">🕒<img src="images/digital-clock.jpg" alt="7-segment clock" onerror="this.remove()"></div>
+      <div class="card-body">
+        <span class="status">In progress</span>
+        <h3>7-Segment Digital Clock</h3>
+        <p>A clock built entirely from discrete logic, with no microcontroller: decade counters, BCD-to-7-segment decoders, and common-anode displays.</p>
+        <div class="tags"><span>74LS90</span><span>CD4511</span><span>Digital logic</span></div>
+        <a class="link" href="https://github.com/YOUR-USERNAME/digital-clock" target="_blank">View on GitHub →</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="thumb">🎵<img src="images/spectrum-analyzer.jpg" alt="Audio spectrum analyzer" onerror="this.remove()"></div>
+      <div class="card-body">
+        <span class="status">In progress</span>
+        <h3>Audio Spectrum Analyzer</h3>
+        <p>Real-time FFT analysis of USB audio streamed into a Teensy 4.1, visualized through the Serial Plotter.</p>
+        <div class="tags"><span>Teensy 4.1</span><span>FFT</span><span>C++</span></div>
+        <a class="link" href="https://github.com/YOUR-USERNAME/spectrum-analyzer" target="_blank">View on GitHub →</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="thumb">🎮<img src="images/fpga-gameboy.jpg" alt="FPGA board" onerror="this.remove()"></div>
+      <div class="card-body">
+        <span class="status">Learning project</span>
+        <h3>FPGA Game Boy</h3>
+        <p>Learning FPGA design from the ground up on a Tang Nano 9K, working toward a hardware implementation of the original Game Boy.</p>
+        <div class="tags"><span>Tang Nano 9K</span><span>Verilog</span><span>FPGA</span></div>
+        <a class="link" href="https://github.com/YOUR-USERNAME/fpga-gameboy" target="_blank">View on GitHub →</a>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section id="skills" class="wrap">
+  <h2>Skills</h2>
+  <div class="skills">
+    <div><h3>Hardware</h3><p>PCB design, power distribution, DC-DC regulation, battery systems, safety circuitry, digital logic</p></div>
+    <div><h3>Tools</h3><p>Altium Designer, KiCad</p></div>
+    <div><h3>Platforms</h3><p>ESP32, Teensy, FPGA (Tang Nano 9K)</p></div>
+  </div>
+</section>
+
+<section id="contact" class="wrap">
+  <h2>Contact</h2>
+  <p style="color: var(--muted);">
+    Open to internships and research opportunities in embedded systems and robotics.<br>
+    <a href="mailto:llopezrondon@usf.edu">llopezrondon@usf.edu</a> ·
+    <a href="https://www.linkedin.com/in/luislopezrondon" target="_blank">LinkedIn</a> ·
+    <a href="https://github.com/YOUR-USERNAME" target="_blank">GitHub</a>
+  </p>
+</section>
+
+<footer>© 2026 Luis Lopez Rondon</footer>
+
+</body>
+</html>

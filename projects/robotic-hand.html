@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mimetic Robotic Hand | Luis Lopez Rondon</title>
-  <meta name="description" content="A five-servo robotic hand controlled by a flex-sensor data glove and computer vision.">
+  <meta name="description" content="A five-servo robotic hand controlled by a flex-sensor data glove and OpenCV computer vision.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
@@ -31,14 +31,14 @@
     <span class="status">In progress · EXO project</span>
     <h1>Mimetic Robotic Hand</h1>
     <p class="lead">A five-servo robotic hand that mirrors a human hand in real time, controlled by both a flex-sensor data glove and computer vision.</p>
-    <div class="tags"><span>ESP32-S3</span><span>PCA9685</span><span>Altium Designer</span><span>Buck converter</span></div>
+    <div class="tags"><span>ESP32-S3</span><span>PCA9685</span><span>Altium Designer</span><span>OpenCV</span></div>
     <div class="btns">
       <a class="btn primary" href="https://github.com/luislopezrondon/robotic-hand" target="_blank" rel="noopener">View on GitHub →</a>
     </div>
   </header>
 
   <figure class="cover">
-    <img src="../images/robotic-hand.jpg" alt="Robotic hand" onerror="this.parentElement.remove()">
+    <img src="../images/robotic-hand.webp" alt="Robotic hand" onerror="this.parentElement.remove()">
   </figure>
 
   <dl class="meta">
@@ -51,13 +51,12 @@
   <div class="project-body">
     <article class="prose">
       <h2>Overview</h2>
-      <p>The hand can be controlled two ways. A data glove with five flex sensors measures how far each finger bends, and a computer vision mode tracks a hand on camera. Either way, an ESP32-S3 sends matching positions to five MG996R servos through a PCA9685 PWM driver, so the robotic hand mirrors the user's hand in real time.</p>
-      <!-- EDIT: describe the computer vision side (camera, library, where it runs, how it talks to the ESP32). -->
+      <p>The hand can be controlled two ways. A data glove with five flex sensors measures how far each finger bends. In computer vision mode, OpenCV running on a laptop tracks a hand through a camera and sends finger positions to the ESP32 over USB. Either way, an ESP32-S3 drives five MG996R servos through a PCA9685 PWM driver, so the robotic hand mirrors the user's hand in real time.</p>
       <p>The hand currently runs on a breadboard, and a custom PCB is in progress.</p>
 
       <div class="flow-label">Signal path</div>
       <div class="flow">
-        <div class="node"><small>Input</small><strong>Flex glove or computer vision</strong></div>
+        <div class="node"><small>Input</small><strong>Flex glove or OpenCV (laptop)</strong></div>
         <div class="node"><small>Control</small><strong>ESP32-S3</strong></div>
         <div class="node"><small>Drive</small><strong>PCA9685 over I2C</strong></div>
         <div class="node"><small>Actuate</small><strong>5× MG996R servos</strong></div>
@@ -68,22 +67,26 @@
         <img src="../images/robotic-hand/v1.jpg" alt="Version 1 of the robotic hand" onerror="this.parentElement.remove()">
         <figcaption>Version 1</figcaption>
       </figure>
-      <p>This was the first version of the hand. I'm now reiterating with a more streamlined design.</p>
-      <!-- EDIT: say what's changing in the new design. -->
+      <p>This was the first version of the hand, built on a breadboard. The biggest problem during testing was flex sensor connections coming loose. I'm now reiterating with a more streamlined design that gives the glove better support, with the flex sensors soldered directly to the PCB.</p>
 
       <h2>Custom PCB (in progress)</h2>
       <p>The first PCB design was done in KiCad around an ESP32-WROOM-32. I'm now redesigning it in Altium around an <strong>ESP32-S3-WROOM-1U-N8R8</strong>, which adds native USB over USB-C.</p>
-      <p>The flex sensors sit on ADC1 (GPIO4–8), avoiding the GPIO3 strapping pin and the PSRAM pins (35–37). The PCA9685 is on I2C (GPIO1 SDA, GPIO2 SCL) with 4.7kΩ pull-ups, at address <code>0x40</code>. The flex sensors connect through locking JST-PH connectors.</p>
+      <p>The flex sensors sit on ADC1 (GPIO4–8), avoiding the GPIO3 strapping pin and the PSRAM pins (35–37). The PCA9685 is on I2C (GPIO1 SDA, GPIO2 SCL) with 4.7kΩ pull-ups, at address <code>0x40</code>.</p>
 
       <h2>Power</h2>
-      <p>The servos run from a DC power supply instead of a battery, which keeps the design simpler. A buck converter steps the supply down to a 6V servo rail.</p>
-      <!-- EDIT: add the supply voltage. -->
+      <p>The servos run directly from a 6V bench power supply, and an AMS1117 regulator provides the 3.3V logic power for the ESP32-S3.</p>
 
       <div class="flow-label">Servo power</div>
       <div class="flow">
-        <div class="node"><small>Source</small><strong>DC power supply</strong></div>
-        <div class="node"><small>Convert</small><strong>Buck converter</strong></div>
-        <div class="node"><small>Rail</small><strong>6V servo supply</strong></div>
+        <div class="node"><small>Source</small><strong>6V power supply</strong></div>
+        <div class="node"><small>Load</small><strong>5× MG996R servos</strong></div>
+      </div>
+
+      <div class="flow-label">Logic power</div>
+      <div class="flow">
+        <div class="node"><small>Source</small><strong>6V power supply</strong></div>
+        <div class="node"><small>Regulate</small><strong>AMS1117</strong></div>
+        <div class="node"><small>Rail</small><strong>3.3V → ESP32-S3 &amp; logic</strong></div>
       </div>
 
       <h2>What's next</h2>
@@ -99,8 +102,8 @@
         <div><dt>MCU</dt><dd>ESP32-S3-WROOM-1U-N8R8</dd></div>
         <div><dt>Servo driver</dt><dd>PCA9685 · I2C @ 0x40</dd></div>
         <div><dt>Actuators</dt><dd>5× MG996R</dd></div>
-        <div><dt>Inputs</dt><dd>5× flex sensors · computer vision</dd></div>
-        <div><dt>Power</dt><dd>DC supply → 6V buck</dd></div>
+        <div><dt>Inputs</dt><dd>5× flex sensors · OpenCV (laptop, USB)</dd></div>
+        <div><dt>Power</dt><dd>6V PSU · AMS1117 (3.3V logic)</dd></div>
         <div><dt>USB</dt><dd>USB-C, native USB</dd></div>
         <div><dt>EDA</dt><dd>Altium Designer</dd></div>
       </dl>
@@ -109,11 +112,10 @@
 
   <section class="gallery-section">
     <h2>Gallery</h2>
-    <!-- EDIT: drop photos into images/robotic-hand/ and update captions. -->
     <div class="gallery">
-      <figure><img src="../images/robotic-hand/1.jpg" alt="Data glove" onerror="this.parentElement.remove()"><figcaption>Flex-sensor data glove</figcaption></figure>
-      <figure><img src="../images/robotic-hand/2.jpg" alt="Breadboard setup" onerror="this.parentElement.remove()"><figcaption>Current breadboard setup</figcaption></figure>
-      <figure><img src="../images/robotic-hand/3.jpg" alt="PCB layout in progress" onerror="this.parentElement.remove()"><figcaption>Altium PCB layout (in progress)</figcaption></figure>
+      <figure><img src="../images/robotic-hand/1.jpg" alt="Flex-sensor data glove" onerror="this.parentElement.remove()"><figcaption>Flex-sensor data glove</figcaption></figure>
+      <figure><img src="../images/robotic-hand/2.jpg" alt="Breadboard setup" onerror="this.parentElement.remove()"><figcaption>Breadboard setup</figcaption></figure>
+      <figure><img src="../images/robotic-hand/3.jpg" alt="Altium PCB layout" onerror="this.parentElement.remove()"><figcaption>Altium PCB layout</figcaption></figure>
     </div>
   </section>
 

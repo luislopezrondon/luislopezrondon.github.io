@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mimetic Robotic Hand | Luis Lopez Rondon</title>
-  <meta name="description" content="A flex-sensor data glove controlling a five-servo robotic hand on a custom ESP32-S3 PCB.">
+  <meta name="description" content="A five-servo robotic hand controlled by a flex-sensor data glove and computer vision.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
@@ -19,7 +19,6 @@
     <ul>
       <li><a href="../index.html#about">About</a></li>
       <li><a href="../index.html#projects">Projects</a></li>
-      <li><a href="../index.html#skills">Skills</a></li>
       <li><a href="../index.html#contact">Contact</a></li>
     </ul>
   </div>
@@ -29,10 +28,10 @@
   <a class="back" href="../index.html#projects">← All projects</a>
 
   <header class="project-hero">
-    <span class="status">In progress</span>
+    <span class="status">In progress · EXO project</span>
     <h1>Mimetic Robotic Hand</h1>
-    <p class="lead">A flex-sensor data glove that controls a five-servo robotic hand in real time, running on a custom PCB with onboard buck regulation from a 3S LiPo.</p>
-    <div class="tags"><span>ESP32-S3</span><span>PCA9685</span><span>I2C</span><span>Altium</span></div>
+    <p class="lead">A five-servo robotic hand that mirrors a human hand in real time, controlled by both a flex-sensor data glove and computer vision.</p>
+    <div class="tags"><span>ESP32-S3</span><span>PCA9685</span><span>Altium Designer</span><span>Buck converter</span></div>
     <div class="btns">
       <a class="btn primary" href="https://github.com/luislopezrondon/robotic-hand" target="_blank" rel="noopener">View on GitHub →</a>
     </div>
@@ -43,48 +42,54 @@
   </figure>
 
   <dl class="meta">
-    <div><dt>Type</dt><dd>Personal project</dd></div>
+    <div><dt>Team</dt><dd>IEEE at USF · EXO</dd></div>
     <div><dt>MCU</dt><dd>ESP32-S3</dd></div>
-    <div><dt>EDA</dt><dd>Altium (v1 in KiCad)</dd></div>
-    <div><dt>Status</dt><dd>In progress</dd></div>
+    <div><dt>Control</dt><dd>Flex glove + computer vision</dd></div>
+    <div><dt>Status</dt><dd>Breadboard · PCB in progress</dd></div>
   </dl>
 
   <div class="project-body">
     <article class="prose">
       <h2>Overview</h2>
-      <p>Five flex sensors on a glove measure how far each finger bends. An ESP32-S3 reads them on its ADC and sends matching positions to five MG996R servos through a PCA9685 PWM driver, so the robotic hand mirrors the glove in real time.</p>
-      <p>The project started as breadboard experiments with a flex sensor and a servo and grew into a full custom PCB.</p>
+      <p>The hand can be controlled two ways. A data glove with five flex sensors measures how far each finger bends, and a computer vision mode tracks a hand on camera. Either way, an ESP32-S3 sends matching positions to five MG996R servos through a PCA9685 PWM driver, so the robotic hand mirrors the user's hand in real time.</p>
+      <!-- EDIT: describe the computer vision side (camera, library, where it runs, how it talks to the ESP32). -->
+      <p>The hand currently runs on a breadboard, and a custom PCB is in progress.</p>
 
       <div class="flow-label">Signal path</div>
       <div class="flow">
-        <div class="node"><small>Sense</small><strong>5× flex sensors (glove)</strong></div>
-        <div class="node"><small>Read</small><strong>ESP32-S3 ADC1</strong></div>
+        <div class="node"><small>Input</small><strong>Flex glove or computer vision</strong></div>
+        <div class="node"><small>Control</small><strong>ESP32-S3</strong></div>
         <div class="node"><small>Drive</small><strong>PCA9685 over I2C</strong></div>
         <div class="node"><small>Actuate</small><strong>5× MG996R servos</strong></div>
       </div>
 
-      <h2>Custom PCB</h2>
-      <p>The first board was designed in KiCad around an ESP32-WROOM-32. I'm now rebuilding it in Altium around an <strong>ESP32-S3-WROOM-1U-N8R8</strong>, which adds native USB over USB-C, and the 1U variant takes an external antenna through a U.FL connector.</p>
-      <p>Pin planning mattered on the S3. The flex sensors sit on ADC1 (GPIO4–8) so they keep working with Wi-Fi enabled, and they avoid the GPIO3 strapping pin and the PSRAM pins (35–37). The PCA9685 is on I2C (GPIO1 SDA, GPIO2 SCL) with 4.7kΩ pull-ups, at address <code>0x40</code>. The flex sensors connect through locking JST-PH connectors.</p>
+      <h2>Version 1</h2>
+      <figure>
+        <img src="../images/robotic-hand/v1.jpg" alt="Version 1 of the robotic hand" onerror="this.parentElement.remove()">
+        <figcaption>Version 1</figcaption>
+      </figure>
+      <p>This was the first version of the hand. I'm now reiterating with a more streamlined design.</p>
+      <!-- EDIT: say what's changing in the new design. -->
+
+      <h2>Custom PCB (in progress)</h2>
+      <p>The first PCB design was done in KiCad around an ESP32-WROOM-32. I'm now redesigning it in Altium around an <strong>ESP32-S3-WROOM-1U-N8R8</strong>, which adds native USB over USB-C.</p>
+      <p>The flex sensors sit on ADC1 (GPIO4–8), avoiding the GPIO3 strapping pin and the PSRAM pins (35–37). The PCA9685 is on I2C (GPIO1 SDA, GPIO2 SCL) with 4.7kΩ pull-ups, at address <code>0x40</code>. The flex sensors connect through locking JST-PH connectors.</p>
 
       <h2>Power</h2>
-      <p>A 3S LiPo (9–12.6V) feeds a buck converter that produces a dedicated 6V rail for the servos. The first revision used an MP1584EN. The redesign moves to a TI <strong>TPS56A37</strong> (10A, 4.5–28V input) for much more current headroom with five servos moving at once.</p>
+      <p>The servos run from a DC power supply instead of a battery, which keeps the design simpler. A buck converter steps the supply down to a 6V servo rail.</p>
+      <!-- EDIT: add the supply voltage. -->
 
       <div class="flow-label">Servo power</div>
       <div class="flow">
-        <div class="node"><small>Source</small><strong>3S LiPo, 9–12.6V</strong></div>
-        <div class="node"><small>Convert</small><strong>TPS56A37 buck</strong></div>
+        <div class="node"><small>Source</small><strong>DC power supply</strong></div>
+        <div class="node"><small>Convert</small><strong>Buck converter</strong></div>
         <div class="node"><small>Rail</small><strong>6V servo supply</strong></div>
       </div>
 
-      <h2>Lessons learned</h2>
-      <p>An early ESP32 was destroyed by an overvoltage from a bench supply. That pushed me to treat power isolation as a core part of the design. I added Schottky diodes to prevent back-feeding, kept USB separate from the battery supply, and cut traces on the DevKit to split the two.</p>
-
       <h2>What's next</h2>
       <ul>
-        <li>Finish the Altium layout for the ESP32-S3 revision</li>
-        <li>Complete the TPS56A37 servo supply design</li>
-        <li>Assemble and bring up the new board</li>
+        <li>Finish the Altium layout for the ESP32-S3 board</li>
+        <li>Assemble and bring up the PCB</li>
       </ul>
     </article>
 
@@ -94,10 +99,10 @@
         <div><dt>MCU</dt><dd>ESP32-S3-WROOM-1U-N8R8</dd></div>
         <div><dt>Servo driver</dt><dd>PCA9685 · I2C @ 0x40</dd></div>
         <div><dt>Actuators</dt><dd>5× MG996R</dd></div>
-        <div><dt>Sensors</dt><dd>5× flex · ADC1 GPIO4–8</dd></div>
-        <div><dt>Power</dt><dd>3S LiPo → 6V (TPS56A37)</dd></div>
+        <div><dt>Inputs</dt><dd>5× flex sensors · computer vision</dd></div>
+        <div><dt>Power</dt><dd>DC supply → 6V buck</dd></div>
         <div><dt>USB</dt><dd>USB-C, native USB</dd></div>
-        <div><dt>Antenna</dt><dd>External via U.FL</dd></div>
+        <div><dt>EDA</dt><dd>Altium Designer</dd></div>
       </dl>
     </aside>
   </div>
@@ -107,8 +112,8 @@
     <!-- EDIT: drop photos into images/robotic-hand/ and update captions. -->
     <div class="gallery">
       <figure><img src="../images/robotic-hand/1.jpg" alt="Data glove" onerror="this.parentElement.remove()"><figcaption>Flex-sensor data glove</figcaption></figure>
-      <figure><img src="../images/robotic-hand/2.jpg" alt="PCB layout" onerror="this.parentElement.remove()"><figcaption>Altium PCB layout</figcaption></figure>
-      <figure><img src="../images/robotic-hand/3.jpg" alt="Breadboard prototype" onerror="this.parentElement.remove()"><figcaption>Early breadboard prototype</figcaption></figure>
+      <figure><img src="../images/robotic-hand/2.jpg" alt="Breadboard setup" onerror="this.parentElement.remove()"><figcaption>Current breadboard setup</figcaption></figure>
+      <figure><img src="../images/robotic-hand/3.jpg" alt="PCB layout in progress" onerror="this.parentElement.remove()"><figcaption>Altium PCB layout (in progress)</figcaption></figure>
     </div>
   </section>
 

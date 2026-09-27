@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PID Tremor-Stabilizing Spoon | Luis Lopez Rondon</title>
+  <meta name="description" content="A handheld spoon that counteracts Parkinson's tremors with PID control, on a custom ESP32-C3 PCB.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <script src="../script.js"></script>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="../index.html" class="logo"><span class="logo-mark">LR</span><span class="logo-text">Luis Lopez Rondon</span></a>
+    <ul>
+      <li><a href="../index.html#about">About</a></li>
+      <li><a href="../index.html#projects">Projects</a></li>
+      <li><a href="../index.html#skills">Skills</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="wrap project">
+  <a class="back" href="../index.html#projects">← All projects</a>
+
+  <header class="project-hero">
+    <span class="status">In progress</span>
+    <h1>PID Tremor-Stabilizing Spoon</h1>
+    <p class="lead">A handheld spoon that uses PID control to counteract Parkinson's tremors, built on a custom PCB with its own charging and battery protection.</p>
+    <div class="tags"><span>ESP32-C3</span><span>PID control</span><span>18650</span><span>Altium</span></div>
+    <div class="btns">
+      <a class="btn primary" href="https://github.com/luislopezrondon/pid-spoon" target="_blank" rel="noopener">View on GitHub →</a>
+    </div>
+  </header>
+
+  <figure class="cover">
+    <img src="../images/pid-spoon.jpg" alt="PID spoon PCB" onerror="this.parentElement.remove()">
+  </figure>
+
+  <dl class="meta">
+    <div><dt>Type</dt><dd>Personal project + workshop</dd></div>
+    <div><dt>MCU</dt><dd>ESP32-C3-MINI-1</dd></div>
+    <div><dt>EDA</dt><dd>Altium</dd></div>
+    <div><dt>Status</dt><dd>In progress</dd></div>
+  </dl>
+
+  <div class="project-body">
+    <article class="prose">
+      <h2>Overview</h2>
+      <p>Tremors can make something as simple as eating difficult. This spoon measures its own motion and runs a PID loop on an ESP32-C3 to drive servos that move the spoon head against the tremor, keeping it steady.</p>
+      <!-- EDIT: name the motion sensor you're using and describe the mechanical design (how many axes, how the servos attach). -->
+
+      <div class="flow-label">Control loop</div>
+      <div class="flow">
+        <div class="node"><small>Measure</small><strong>Spoon orientation</strong></div>
+        <div class="node"><small>Compute</small><strong>PID on ESP32-C3</strong></div>
+        <div class="node"><small>Actuate</small><strong>Servo correction</strong></div>
+      </div>
+      <p>The proportional term reacts to the current error, the integral term removes slow drift, and the derivative term damps fast motion, which is what makes the spoon feel steady instead of jittery.</p>
+      <!-- EDIT: add your tuning process and any before/after results. -->
+
+      <h2>Hardware</h2>
+      <p>The board is built around the <strong>ESP32-C3-MINI-1-N4</strong>. To keep it small, there's no USB data connection on the board: firmware is flashed over UART (TX/RX), and the USB-C port is used only for charging.</p>
+      <p>Power moved from a 2S LiPo to a single 18650 cell in a Keystone 1043 holder, with a boost converter for the servos. A TP4056 handles charging, and a DW01A + FS8205 pair protects the cell from over-charge, over-discharge, and shorts.</p>
+
+      <div class="flow-label">Power path</div>
+      <div class="flow">
+        <div class="node"><small>Charge</small><strong>USB-C + TP4056</strong></div>
+        <div class="node"><small>Store</small><strong>18650 + DW01A / FS8205</strong></div>
+        <div class="node"><small>Boost</small><strong>Boost converter</strong></div>
+        <div class="node"><small>Load</small><strong>Stabilizing servos</strong></div>
+      </div>
+
+      <h2>Teaching it</h2>
+      <p>I turned this board into an Altium workshop for IEEE at USF EXO, walking students through designing their own PID Parkinson's spoon.</p>
+      <!-- EDIT: how many people attended, what they walked away with. -->
+
+      <h2>What's next</h2>
+      <ul>
+        <li>Finalize the PCB and order boards</li>
+        <li>Write and tune the PID firmware</li>
+        <li>Build the mechanical assembly</li>
+      </ul>
+    </article>
+
+    <aside class="specs">
+      <h3>Key specs</h3>
+      <dl>
+        <div><dt>MCU</dt><dd>ESP32-C3-MINI-1-N4</dd></div>
+        <div><dt>Battery</dt><dd>1× 18650 (Keystone 1043)</dd></div>
+        <div><dt>Charging</dt><dd>TP4056 · USB-C</dd></div>
+        <div><dt>Protection</dt><dd>DW01A + FS8205</dd></div>
+        <div><dt>Servo power</dt><dd>Boost converter</dd></div>
+        <div><dt>Programming</dt><dd>UART (TX/RX)</dd></div>
+      </dl>
+    </aside>
+  </div>
+
+  <section class="gallery-section">
+    <h2>Gallery</h2>
+    <!-- EDIT: drop photos into images/pid-spoon/ and update captions. -->
+    <div class="gallery">
+      <figure><img src="../images/pid-spoon/1.jpg" alt="Schematic" onerror="this.parentElement.remove()"><figcaption>Schematic</figcaption></figure>
+      <figure><img src="../images/pid-spoon/2.jpg" alt="PCB layout" onerror="this.parentElement.remove()"><figcaption>PCB layout</figcaption></figure>
+      <figure><img src="../images/pid-spoon/3.jpg" alt="Altium workshop" onerror="this.parentElement.remove()"><figcaption>Altium workshop for IEEE EXO</figcaption></figure>
+    </div>
+  </section>
+
+  <nav class="pager" aria-label="More projects">
+    <a href="robotic-hand.html"><small>← Previous</small><strong>Mimetic Robotic Hand</strong></a>
+    <a class="next" href="spectrum-analyzer.html"><small>Next →</small><strong>Audio Spectrum Analyzer</strong></a>
+  </nav>
+</main>
+
+<footer><div class="wrap">© <span data-year>2026</span> Luis Lopez Rondon</div></footer>
+
+</body>
+</html>

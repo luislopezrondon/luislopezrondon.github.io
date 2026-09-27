@@ -278,6 +278,11 @@ footer { border-top: 1px solid var(--border); padding: 32px 0; color: var(--mute
 }
 .prose figure img { width: 100%; max-height: 440px; object-fit: contain; background: var(--thumb); }
 .prose figcaption { padding: 12px 14px; font-size: 0.88rem; color: var(--muted); }
+.prose figure.pair .pair-imgs { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--border); }
+.prose figure.pair .pair-imgs:has(img:only-child) { grid-template-columns: 1fr; }
+.prose figure.pair img { aspect-ratio: 4 / 3; max-height: none; object-fit: cover; }
+.prose figure.pair:not(:has(img)) { display: none; }
+@container (max-width: 480px) { .prose figure.pair .pair-imgs { grid-template-columns: 1fr; } }
 .callout {
   margin: 20px 0; padding: 16px 20px;
   border-left: 3px solid var(--accent); border-radius: 0 10px 10px 0;

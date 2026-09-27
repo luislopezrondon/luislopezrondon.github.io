@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EXO Exoskeleton Leg | Luis Lopez Rondon</title>
+  <meta name="description" content="Electrical design for a 48V exoskeleton leg: battery selection, DC-DC power rails, and a hardware e-stop.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <script src="../script.js"></script>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="../index.html" class="logo"><span class="logo-mark">LR</span><span class="logo-text">Luis Lopez Rondon</span></a>
+    <ul>
+      <li><a href="../index.html#about">About</a></li>
+      <li><a href="../index.html#projects">Projects</a></li>
+      <li><a href="../index.html#skills">Skills</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="wrap project">
+  <a class="back" href="../index.html#projects">← All projects</a>
+
+  <header class="project-hero">
+    <span class="status">In progress · Team project</span>
+    <h1>EXO Exoskeleton Leg</h1>
+    <p class="lead">Leading electrical design for a powered exoskeleton leg driven by 48V CubeMars AK80-9 actuators: battery selection, DC-DC power rails, and a hardware e-stop that cuts motor power while keeping control electronics alive.</p>
+    <div class="tags"><span>48V power</span><span>E-stop</span><span>DC-DC</span><span>Jetson Nano</span><span>Teensy</span></div>
+  </header>
+
+  <figure class="cover">
+    <img src="../images/exoskeleton.jpg" alt="Exoskeleton leg" onerror="this.parentElement.remove()">
+  </figure>
+
+  <dl class="meta">
+    <div><dt>Role</dt><dd>Electronics &amp; Circuitry Lead</dd></div>
+    <div><dt>Team</dt><dd>IEEE at USF · EXO</dd></div>
+    <div><dt>Focus</dt><dd>Power &amp; safety</dd></div>
+    <div><dt>Status</dt><dd>In progress</dd></div>
+  </dl>
+
+  <div class="project-body">
+    <article class="prose">
+      <h2>Overview</h2>
+      <p>EXO is a student team within IEEE at USF building a powered exoskeleton leg. The leg is driven by four CubeMars AK80-9 actuators on a 48V bus, with a Jetson Nano and Teensy microcontrollers handling compute and control.</p>
+      <p>As Electronics &amp; Circuitry Lead, I'm responsible for the electrical side of the build: the battery, power distribution, the emergency stop, and the PCB. I also teach PCB design to newer members of the team.</p>
+      <!-- EDIT: add a sentence on what the exoskeleton is meant to do (which joints it assists, who it's for). -->
+
+      <h2>Power architecture</h2>
+      <p>Everything runs from a single 48V pack. Each AK80-9 can pull up to 28A at peak, so instead of designing around four actuators at full peak, I'm specifying torque requirements so each one draws closer to 12–15A. That keeps the battery, wiring, and protection requirements realistic for a student budget.</p>
+      <p>From the pack, power splits into two branches:</p>
+
+      <div class="flow-label">Motor branch · switched by the e-stop</div>
+      <div class="flow">
+        <div class="node"><small>Source</small><strong>48V battery pack</strong></div>
+        <div class="node"><small>Safety</small><strong>Hardware e-stop</strong></div>
+        <div class="node"><small>Bus</small><strong>48V motor bus</strong></div>
+        <div class="node"><small>Load</small><strong>4× AK80-9 actuators</strong></div>
+      </div>
+
+      <div class="flow-label">Logic branch · always on</div>
+      <div class="flow">
+        <div class="node"><small>Tap</small><strong>48V, ahead of the e-stop</strong></div>
+        <div class="node"><small>Convert</small><strong>DC-DC converters</strong></div>
+        <div class="node"><small>Rails</small><strong>5V → Jetson Nano<br>3.3V → Teensys &amp; logic</strong></div>
+      </div>
+
+      <h2>Emergency stop</h2>
+      <p>The e-stop is wired to cut the motor bus only. The DC-DC converters tap off the battery <em>ahead</em> of it, so hitting the e-stop kills power to the actuators immediately while the Jetson and Teensys stay powered and the system doesn't have to reboot.</p>
+      <div class="callout"><strong>Staged approach:</strong> a software e-stop during testing and development, and a hardware e-stop that physically breaks the motor circuit in the final build.</div>
+
+      <h2>Battery selection</h2>
+      <p>The pack needs to deliver 48V with at least 5Ah of capacity and a maximum discharge rating above 100A. I'm comparing pre-built e-bike and drone packs against a custom-built pack, weighing size, capacity, and weight.</p>
+      <!-- EDIT: once you pick a pack, explain the final choice and why. -->
+
+      <h2>PCB plan</h2>
+      <p>We're prototyping with pre-made modules (buck converters, an IMU breakout, and so on) so the system can be tested quickly. Once the design is proven, it moves onto a custom PCB.</p>
+
+      <h2>What's next</h2>
+      <ul>
+        <li>Finalize the battery pack</li>
+        <li>Build and test the hardware e-stop</li>
+        <li>Design the custom power and control PCB</li>
+      </ul>
+    </article>
+
+    <aside class="specs">
+      <h3>Key specs</h3>
+      <dl>
+        <div><dt>Actuators</dt><dd>4× CubeMars AK80-9</dd></div>
+        <div><dt>Bus voltage</dt><dd>48V</dd></div>
+        <div><dt>Actuator current</dt><dd>28A peak · ~12–15A target</dd></div>
+        <div><dt>Battery target</dt><dd>48V · ≥5Ah · &gt;100A discharge</dd></div>
+        <div><dt>Logic rails</dt><dd>5V (Jetson Nano) · 3.3V (Teensy)</dd></div>
+        <div><dt>E-stop</dt><dd>Software (dev) → hardware (final)</dd></div>
+      </dl>
+    </aside>
+  </div>
+
+  <section class="gallery-section">
+    <h2>Gallery</h2>
+    <!-- EDIT: drop photos into images/exoskeleton/ and update captions. Missing images hide themselves. -->
+    <div class="gallery">
+      <figure><img src="../images/exoskeleton/1.jpg" alt="Power distribution wiring" onerror="this.parentElement.remove()"><figcaption>Power distribution wiring</figcaption></figure>
+      <figure><img src="../images/exoskeleton/2.jpg" alt="E-stop test setup" onerror="this.parentElement.remove()"><figcaption>E-stop test setup</figcaption></figure>
+      <figure><img src="../images/exoskeleton/3.jpg" alt="Leg assembly" onerror="this.parentElement.remove()"><figcaption>Leg assembly</figcaption></figure>
+    </div>
+  </section>
+
+  <nav class="pager" aria-label="More projects">
+    <a href="spectrum-analyzer.html"><small>← Previous</small><strong>Audio Spectrum Analyzer</strong></a>
+    <a class="next" href="robotic-hand.html"><small>Next →</small><strong>Mimetic Robotic Hand</strong></a>
+  </nav>
+</main>
+
+<footer><div class="wrap">© <span data-year>2026</span> Luis Lopez Rondon</div></footer>
+
+</body>
+</html>

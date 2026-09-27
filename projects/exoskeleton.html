@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>EXO Exoskeleton Leg | Luis Lopez Rondon</title>
-  <meta name="description" content="Electrical design for a 48V exoskeleton leg: battery, DC-DC power rails, and a hardware e-stop.">
+  <meta name="description" content="Electrical design for a 48V lower-limb exoskeleton: battery, DC-DC power rails, and a hardware e-stop.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
@@ -48,9 +48,8 @@
   <div class="project-body">
     <article class="prose">
       <h2>Overview</h2>
-      <p>EXO is a student team within IEEE at USF building a powered exoskeleton leg. The leg is driven by four CubeMars AK80-9 actuators on a 48V bus, with a Jetson Orin Nano and Teensy microcontrollers handling compute and control.</p>
+      <p>EXO is a student team within IEEE at USF building a powered lower-limb exoskeleton that assists the hip and knee for people with an uneven gait. The leg is driven by four CubeMars AK80-9 actuators on a 48V bus, with a Jetson Orin Nano and Teensy microcontrollers handling compute and control.</p>
       <p>As Electronics &amp; Circuitry Lead, I'm responsible for the electrical side of the build: the battery, power distribution, the emergency stop, and the PCB. I also teach PCB design to newer members of the team.</p>
-      <!-- EDIT: add a sentence on what the exoskeleton is meant to do (which joints it assists, who it's for). -->
 
       <h2>Power architecture</h2>
       <p>Everything runs from a single 48V pack. Each AK80-9 can pull up to 28A at peak, so instead of designing around four actuators at full peak, I'm specifying torque requirements so each one draws closer to 12–15A. That keeps the battery, wiring, and protection requirements realistic for a student budget.</p>
@@ -76,8 +75,7 @@
       <div class="callout"><strong>Staged approach:</strong> a software e-stop during testing and development, and a hardware e-stop that physically breaks the motor circuit in the final build.</div>
 
       <h2>Battery</h2>
-      <p>The pack needs to deliver 48V with at least 5Ah of capacity and a maximum discharge rating above 100A. After weighing pre-built e-bike and drone packs against building our own on size, capacity, and weight, we went with a custom Li-ion pack.</p>
-      <!-- EDIT: add the cell configuration (e.g. 13S) and why custom won out. -->
+      <p>The pack needs to deliver 48V with at least 5Ah of capacity and a maximum discharge rating above 100A. After weighing pre-built e-bike and drone packs against building our own, we went with a custom 13S1P Li-ion pack. It's cheaper, more configurable, and takes up less space than a pre-built pack.</p>
 
       <h2>PCB plan</h2>
       <p>We're prototyping with pre-made modules (buck converters, an IMU breakout, and so on) so the system can be tested quickly. Once the design is proven, it moves onto a custom PCB.</p>
@@ -96,7 +94,7 @@
         <div><dt>Actuators</dt><dd>4× CubeMars AK80-9</dd></div>
         <div><dt>Bus voltage</dt><dd>48V</dd></div>
         <div><dt>Actuator current</dt><dd>28A peak · ~12–15A target</dd></div>
-        <div><dt>Battery</dt><dd>Custom Li-ion · 48V · ≥5Ah · &gt;100A</dd></div>
+        <div><dt>Battery</dt><dd>Custom 13S1P Li-ion · 48V · ≥5Ah · &gt;100A</dd></div>
         <div><dt>Logic rails</dt><dd>Jetson Orin Nano · 3.3V (Teensy)</dd></div>
         <div><dt>E-stop</dt><dd>Software (dev) → hardware (final)</dd></div>
       </dl>
@@ -105,7 +103,7 @@
 
   <section class="gallery-section">
     <h2>Gallery</h2>
-    <!-- EDIT: drop photos into images/exoskeleton/ and update captions. Missing images hide themselves. -->
+    <!-- Add photos to images/exoskeleton/ once parts arrive. This section stays hidden until then. -->
     <div class="gallery">
       <figure><img src="../images/exoskeleton/1.jpg" alt="Power distribution wiring" onerror="this.parentElement.remove()"><figcaption>Power distribution wiring</figcaption></figure>
       <figure><img src="../images/exoskeleton/2.jpg" alt="E-stop test setup" onerror="this.parentElement.remove()"><figcaption>E-stop test setup</figcaption></figure>

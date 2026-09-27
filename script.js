@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Click-to-enlarge for cover + gallery images on project pages
-  const zoomable = document.querySelectorAll('.cover img, .gallery img');
+  const zoomable = document.querySelectorAll('.cover img, .gallery img, .prose figure img');
   if (!zoomable.length) return;
 
   const box = document.createElement('div');

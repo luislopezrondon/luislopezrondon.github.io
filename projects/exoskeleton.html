@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>EXO Exoskeleton Leg | Luis Lopez Rondon</title>
-  <meta name="description" content="Electrical design for a 48V exoskeleton leg: battery selection, DC-DC power rails, and a hardware e-stop.">
+  <meta name="description" content="Electrical design for a 48V exoskeleton leg: battery, DC-DC power rails, and a hardware e-stop.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
@@ -19,7 +19,6 @@
     <ul>
       <li><a href="../index.html#about">About</a></li>
       <li><a href="../index.html#projects">Projects</a></li>
-      <li><a href="../index.html#skills">Skills</a></li>
       <li><a href="../index.html#contact">Contact</a></li>
     </ul>
   </div>
@@ -31,8 +30,8 @@
   <header class="project-hero">
     <span class="status">In progress · Team project</span>
     <h1>EXO Exoskeleton Leg</h1>
-    <p class="lead">Leading electrical design for a powered exoskeleton leg driven by 48V CubeMars AK80-9 actuators: battery selection, DC-DC power rails, and a hardware e-stop that cuts motor power while keeping control electronics alive.</p>
-    <div class="tags"><span>48V power</span><span>E-stop</span><span>DC-DC</span><span>Jetson Nano</span><span>Teensy</span></div>
+    <p class="lead">Leading electrical design for a powered exoskeleton leg driven by 48V CubeMars AK80-9 actuators: the battery, DC-DC power rails, and a hardware e-stop that cuts motor power while keeping control electronics alive.</p>
+    <div class="tags"><span>E-stop</span><span>Jetson Orin Nano</span><span>Teensy</span><span>IMU</span><span>Custom Li-ion pack</span></div>
   </header>
 
   <figure class="cover">
@@ -49,7 +48,7 @@
   <div class="project-body">
     <article class="prose">
       <h2>Overview</h2>
-      <p>EXO is a student team within IEEE at USF building a powered exoskeleton leg. The leg is driven by four CubeMars AK80-9 actuators on a 48V bus, with a Jetson Nano and Teensy microcontrollers handling compute and control.</p>
+      <p>EXO is a student team within IEEE at USF building a powered exoskeleton leg. The leg is driven by four CubeMars AK80-9 actuators on a 48V bus, with a Jetson Orin Nano and Teensy microcontrollers handling compute and control.</p>
       <p>As Electronics &amp; Circuitry Lead, I'm responsible for the electrical side of the build: the battery, power distribution, the emergency stop, and the PCB. I also teach PCB design to newer members of the team.</p>
       <!-- EDIT: add a sentence on what the exoskeleton is meant to do (which joints it assists, who it's for). -->
 
@@ -69,23 +68,23 @@
       <div class="flow">
         <div class="node"><small>Tap</small><strong>48V, ahead of the e-stop</strong></div>
         <div class="node"><small>Convert</small><strong>DC-DC converters</strong></div>
-        <div class="node"><small>Rails</small><strong>5V → Jetson Nano<br>3.3V → Teensys &amp; logic</strong></div>
+        <div class="node"><small>Rails</small><strong>Jetson Orin Nano<br>3.3V → Teensys &amp; logic</strong></div>
       </div>
 
       <h2>Emergency stop</h2>
       <p>The e-stop is wired to cut the motor bus only. The DC-DC converters tap off the battery <em>ahead</em> of it, so hitting the e-stop kills power to the actuators immediately while the Jetson and Teensys stay powered and the system doesn't have to reboot.</p>
       <div class="callout"><strong>Staged approach:</strong> a software e-stop during testing and development, and a hardware e-stop that physically breaks the motor circuit in the final build.</div>
 
-      <h2>Battery selection</h2>
-      <p>The pack needs to deliver 48V with at least 5Ah of capacity and a maximum discharge rating above 100A. I'm comparing pre-built e-bike and drone packs against a custom-built pack, weighing size, capacity, and weight.</p>
-      <!-- EDIT: once you pick a pack, explain the final choice and why. -->
+      <h2>Battery</h2>
+      <p>The pack needs to deliver 48V with at least 5Ah of capacity and a maximum discharge rating above 100A. After weighing pre-built e-bike and drone packs against building our own on size, capacity, and weight, we went with a custom Li-ion pack.</p>
+      <!-- EDIT: add the cell configuration (e.g. 13S) and why custom won out. -->
 
       <h2>PCB plan</h2>
       <p>We're prototyping with pre-made modules (buck converters, an IMU breakout, and so on) so the system can be tested quickly. Once the design is proven, it moves onto a custom PCB.</p>
 
       <h2>What's next</h2>
       <ul>
-        <li>Finalize the battery pack</li>
+        <li>Build the custom battery pack</li>
         <li>Build and test the hardware e-stop</li>
         <li>Design the custom power and control PCB</li>
       </ul>
@@ -97,8 +96,8 @@
         <div><dt>Actuators</dt><dd>4× CubeMars AK80-9</dd></div>
         <div><dt>Bus voltage</dt><dd>48V</dd></div>
         <div><dt>Actuator current</dt><dd>28A peak · ~12–15A target</dd></div>
-        <div><dt>Battery target</dt><dd>48V · ≥5Ah · &gt;100A discharge</dd></div>
-        <div><dt>Logic rails</dt><dd>5V (Jetson Nano) · 3.3V (Teensy)</dd></div>
+        <div><dt>Battery</dt><dd>Custom Li-ion · 48V · ≥5Ah · &gt;100A</dd></div>
+        <div><dt>Logic rails</dt><dd>Jetson Orin Nano · 3.3V (Teensy)</dd></div>
         <div><dt>E-stop</dt><dd>Software (dev) → hardware (final)</dd></div>
       </dl>
     </aside>

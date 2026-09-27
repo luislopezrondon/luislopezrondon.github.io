@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Audio Spectrum Analyzer | Luis Lopez Rondon</title>
+  <meta name="description" content="Real-time FFT analysis of USB audio on a Teensy 4.0, visualized on a TFT display.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <script src="../script.js"></script>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="../index.html" class="logo"><span class="logo-mark">LR</span><span class="logo-text">Luis Lopez Rondon</span></a>
+    <ul>
+      <li><a href="../index.html#about">About</a></li>
+      <li><a href="../index.html#projects">Projects</a></li>
+      <li><a href="../index.html#skills">Skills</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="wrap project">
+  <a class="back" href="../index.html#projects">← All projects</a>
+
+  <header class="project-hero">
+    <span class="status">In progress</span>
+    <h1>Audio Spectrum Analyzer</h1>
+    <p class="lead">Real-time FFT analysis of USB audio streamed into a Teensy 4.0, split into frequency bands and drawn on a TFT display.</p>
+    <div class="tags"><span>Teensy 4.0</span><span>FFT</span><span>DSP</span><span>C++</span></div>
+    <div class="btns">
+      <a class="btn primary" href="https://github.com/luislopezrondon/spectrum-analyzer" target="_blank" rel="noopener">View on GitHub →</a>
+    </div>
+  </header>
+
+  <figure class="cover">
+    <img src="../images/spectrum-analyzer.jpg" alt="Audio spectrum analyzer" onerror="this.parentElement.remove()">
+  </figure>
+
+  <dl class="meta">
+    <div><dt>Type</dt><dd>Personal project</dd></div>
+    <div><dt>MCU</dt><dd>Teensy 4.0</dd></div>
+    <div><dt>Language</dt><dd>C++</dd></div>
+    <div><dt>Status</dt><dd>In progress</dd></div>
+  </dl>
+
+  <div class="project-body">
+    <article class="prose">
+      <h2>Overview</h2>
+      <p>I built this to actually understand DSP and FFTs, not just to get a visualizer working. The goal was to understand every line of code. Audio streams from a PC over USB into a Teensy, which runs a 1024-point FFT and groups the bins into 8 logarithmically spaced bands.</p>
+
+      <div class="flow-label">Signal chain</div>
+      <div class="flow">
+        <div class="node"><small>Input</small><strong>USB audio from PC</strong></div>
+        <div class="node"><small>Analyze</small><strong>1024-point FFT</strong></div>
+        <div class="node"><small>Group</small><strong>8 log-spaced bands</strong></div>
+        <div class="node"><small>Display</small><strong>ILI9341 TFT</strong></div>
+      </div>
+
+      <h2>Why logarithmic bands</h2>
+      <p>Human hearing is roughly logarithmic: an octave at 100Hz spans far fewer hertz than an octave at 5kHz. Equal-width bands would cram all the bass into one bar, so log-spaced bands look much closer to what you actually hear. A larger FFT (2048 vs 1024) gives more usable bins, but each frame takes longer, which is the classic time-frequency tradeoff.</p>
+
+      <h2>Debugging the audio chain</h2>
+      <p>At first the chain wouldn't produce usable output. Swapping the FFT for <code>AudioAnalyzePeak</code> proved the audio path itself was fine, which pointed at configuration instead of wiring. The root cause turned out to be <code>AudioMemory(12)</code>, which is far too small for the FFT's buffering. Raising it to 60 fixed it.</p>
+      <div class="callout"><strong>Next step:</strong> profile with <code>AudioMemoryUsageMax()</code> and size the memory pool from real data instead of a guess.</div>
+
+      <h2>Display &amp; line-in</h2>
+      <p>The output is moving from the Arduino Serial Plotter to an ILI9341 TFT on the Teensy's hardware SPI bus, driven with the ILI9341_t3 library. I also added an aux line-in through the PJRC audio shield.</p>
+
+      <h2>Next revision: custom PCB</h2>
+      <p>The next version is a custom PCB designed with a teammate. It keeps USB audio in, adds line-in through an ADC circuit I'm designing myself, and adds a DAC output to speakers so the system can play audio as well as display it. I'm evaluating an STM32 for this revision.</p>
+
+      <div class="flow-label">Planned chain</div>
+      <div class="flow">
+        <div class="node"><small>Input</small><strong>Line-in + USB audio</strong></div>
+        <div class="node"><small>Convert</small><strong>Custom ADC</strong></div>
+        <div class="node"><small>Process</small><strong>STM32 (planned)</strong></div>
+        <div class="node"><small>Output</small><strong>Custom DAC → speakers</strong></div>
+      </div>
+    </article>
+
+    <aside class="specs">
+      <h3>Key specs</h3>
+      <dl>
+        <div><dt>MCU</dt><dd>Teensy 4.0</dd></div>
+        <div><dt>Input</dt><dd>USB audio · line-in (audio shield)</dd></div>
+        <div><dt>FFT</dt><dd>1024-point</dd></div>
+        <div><dt>Output</dt><dd>8 log-spaced bands</dd></div>
+        <div><dt>Display</dt><dd>ILI9341 TFT over SPI</dd></div>
+        <div><dt>Software</dt><dd>Teensyduino · PJRC Audio Library</dd></div>
+      </dl>
+    </aside>
+  </div>
+
+  <section class="gallery-section">
+    <h2>Gallery</h2>
+    <!-- EDIT: drop photos into images/spectrum-analyzer/ and update captions. -->
+    <div class="gallery">
+      <figure><img src="../images/spectrum-analyzer/1.jpg" alt="TFT display output" onerror="this.parentElement.remove()"><figcaption>Spectrum on the TFT display</figcaption></figure>
+      <figure><img src="../images/spectrum-analyzer/2.jpg" alt="Teensy and audio shield" onerror="this.parentElement.remove()"><figcaption>Teensy + audio shield wiring</figcaption></figure>
+      <figure><img src="../images/spectrum-analyzer/3.jpg" alt="Serial Plotter output" onerror="this.parentElement.remove()"><figcaption>Early Serial Plotter output</figcaption></figure>
+    </div>
+  </section>
+
+  <nav class="pager" aria-label="More projects">
+    <a href="pid-spoon.html"><small>← Previous</small><strong>PID Tremor-Stabilizing Spoon</strong></a>
+    <a class="next" href="exoskeleton.html"><small>Next →</small><strong>EXO Exoskeleton Leg</strong></a>
+  </nav>
+</main>
+
+<footer><div class="wrap">© <span data-year>2026</span> Luis Lopez Rondon</div></footer>
+
+</body>
+</html>

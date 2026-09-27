@@ -159,7 +159,8 @@ body > section { padding: 88px 0; }
 .facts dd { font-weight: 600; text-align: right; }
 
 /* Project cards */
-.grid { display: grid; gap: 24px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid { display: grid; gap: 20px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1000px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .card {
   display: flex; flex-direction: column; overflow: hidden;
   background: var(--card); color: inherit;
@@ -171,22 +172,28 @@ body > section { padding: 88px 0; }
   border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
 }
 .card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-.thumb { position: relative; height: 200px; overflow: hidden; background: var(--thumb); }
+.thumb {
+  position: relative; aspect-ratio: 4 / 3; overflow: hidden;
+  background: var(--thumb); border-bottom: 1px solid var(--border);
+}
 .thumb::before {
   content: attr(data-label); position: absolute; inset: 0;
   display: grid; place-items: center;
-  font-family: var(--mono); font-size: 0.85rem; color: var(--muted);
+  font-family: var(--mono); font-size: 0.8rem; color: var(--muted);
   background-image:
     linear-gradient(var(--border) 1px, transparent 1px),
     linear-gradient(90deg, var(--border) 1px, transparent 1px);
-  background-size: 24px 24px;
+  background-size: 20px 20px;
 }
 .thumb:has(img)::before { display: none; }
-.thumb img { position: relative; width: 100%; height: 100%; object-fit: contain; padding: 14px; }
-.card-body { display: flex; flex-direction: column; flex: 1; padding: 22px; }
-.card h3 { font-size: 1.25rem; letter-spacing: -0.015em; margin: 12px 0 8px; }
-.card p { color: var(--muted); font-size: 0.95rem; flex: 1; }
-.more { display: inline-flex; align-items: center; gap: 6px; margin-top: 18px; font-weight: 600; font-size: 0.93rem; color: var(--accent); }
+.thumb img { position: relative; width: 100%; height: 100%; object-fit: cover; }
+.card-body { display: flex; flex-direction: column; flex: 1; padding: 18px; }
+.card h3 { font-size: 1.05rem; line-height: 1.3; letter-spacing: -0.01em; margin: 10px 0 6px; }
+.card p { color: var(--muted); font-size: 0.88rem; line-height: 1.55; flex: 1; }
+.card .status { font-size: 0.7rem; padding: 3px 9px; }
+.card .tags { gap: 5px; margin-top: 14px; }
+.card .tags span { font-size: 0.68rem; padding: 3px 7px; }
+.more { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; font-weight: 600; font-size: 0.88rem; color: var(--accent); }
 .more .arrow { transition: transform 0.2s; }
 .card:hover .more .arrow { transform: translateX(4px); }
 

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mimetic Robotic Hand | Luis Lopez Rondon</title>
+  <meta name="description" content="A flex-sensor data glove controlling a five-servo robotic hand on a custom ESP32-S3 PCB.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <script src="../script.js"></script>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="../index.html" class="logo"><span class="logo-mark">LR</span><span class="logo-text">Luis Lopez Rondon</span></a>
+    <ul>
+      <li><a href="../index.html#about">About</a></li>
+      <li><a href="../index.html#projects">Projects</a></li>
+      <li><a href="../index.html#skills">Skills</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="wrap project">
+  <a class="back" href="../index.html#projects">← All projects</a>
+
+  <header class="project-hero">
+    <span class="status">In progress</span>
+    <h1>Mimetic Robotic Hand</h1>
+    <p class="lead">A flex-sensor data glove that controls a five-servo robotic hand in real time, running on a custom PCB with onboard buck regulation from a 3S LiPo.</p>
+    <div class="tags"><span>ESP32-S3</span><span>PCA9685</span><span>I2C</span><span>Altium</span></div>
+    <div class="btns">
+      <a class="btn primary" href="https://github.com/luislopezrondon/robotic-hand" target="_blank" rel="noopener">View on GitHub →</a>
+    </div>
+  </header>
+
+  <figure class="cover">
+    <img src="../images/robotic-hand.webp" alt="Robotic hand" onerror="this.parentElement.remove()">
+  </figure>
+
+  <dl class="meta">
+    <div><dt>Type</dt><dd>Personal project</dd></div>
+    <div><dt>MCU</dt><dd>ESP32-S3</dd></div>
+    <div><dt>EDA</dt><dd>Altium (v1 in KiCad)</dd></div>
+    <div><dt>Status</dt><dd>In progress</dd></div>
+  </dl>
+
+  <div class="project-body">
+    <article class="prose">
+      <h2>Overview</h2>
+      <p>Five flex sensors on a glove measure how far each finger bends. An ESP32-S3 reads them on its ADC and sends matching positions to five MG996R servos through a PCA9685 PWM driver, so the robotic hand mirrors the glove in real time.</p>
+      <p>The project started as breadboard experiments with a flex sensor and a servo and grew into a full custom PCB.</p>
+
+      <div class="flow-label">Signal path</div>
+      <div class="flow">
+        <div class="node"><small>Sense</small><strong>5× flex sensors (glove)</strong></div>
+        <div class="node"><small>Read</small><strong>ESP32-S3 ADC1</strong></div>
+        <div class="node"><small>Drive</small><strong>PCA9685 over I2C</strong></div>
+        <div class="node"><small>Actuate</small><strong>5× MG996R servos</strong></div>
+      </div>
+
+      <h2>Custom PCB</h2>
+      <p>The first board was designed in KiCad around an ESP32-WROOM-32. I'm now rebuilding it in Altium around an <strong>ESP32-S3-WROOM-1U-N8R8</strong>, which adds native USB over USB-C, and the 1U variant takes an external antenna through a U.FL connector.</p>
+      <p>Pin planning mattered on the S3. The flex sensors sit on ADC1 (GPIO4–8) so they keep working with Wi-Fi enabled, and they avoid the GPIO3 strapping pin and the PSRAM pins (35–37). The PCA9685 is on I2C (GPIO1 SDA, GPIO2 SCL) with 4.7kΩ pull-ups, at address <code>0x40</code>. The flex sensors connect through locking JST-PH connectors.</p>
+
+      <h2>Power</h2>
+      <p>A 3S LiPo (9–12.6V) feeds a buck converter that produces a dedicated 6V rail for the servos. The first revision used an MP1584EN. The redesign moves to a TI <strong>TPS56A37</strong> (10A, 4.5–28V input) for much more current headroom with five servos moving at once.</p>
+
+      <div class="flow-label">Servo power</div>
+      <div class="flow">
+        <div class="node"><small>Source</small><strong>3S LiPo, 9–12.6V</strong></div>
+        <div class="node"><small>Convert</small><strong>TPS56A37 buck</strong></div>
+        <div class="node"><small>Rail</small><strong>6V servo supply</strong></div>
+      </div>
+
+      <h2>Lessons learned</h2>
+      <p>An early ESP32 was destroyed by an overvoltage from a bench supply. That pushed me to treat power isolation as a core part of the design. I added Schottky diodes to prevent back-feeding, kept USB separate from the battery supply, and cut traces on the DevKit to split the two.</p>
+
+      <h2>What's next</h2>
+      <ul>
+        <li>Finish the Altium layout for the ESP32-S3 revision</li>
+        <li>Complete the TPS56A37 servo supply design</li>
+        <li>Assemble and bring up the new board</li>
+      </ul>
+    </article>
+
+    <aside class="specs">
+      <h3>Key specs</h3>
+      <dl>
+        <div><dt>MCU</dt><dd>ESP32-S3-WROOM-1U-N8R8</dd></div>
+        <div><dt>Servo driver</dt><dd>PCA9685 · I2C @ 0x40</dd></div>
+        <div><dt>Actuators</dt><dd>5× MG996R</dd></div>
+        <div><dt>Sensors</dt><dd>5× flex · ADC1 GPIO4–8</dd></div>
+        <div><dt>Power</dt><dd>3S LiPo → 6V (TPS56A37)</dd></div>
+        <div><dt>USB</dt><dd>USB-C, native USB</dd></div>
+        <div><dt>Antenna</dt><dd>External via U.FL</dd></div>
+      </dl>
+    </aside>
+  </div>
+
+  <section class="gallery-section">
+    <h2>Gallery</h2>
+    <!-- EDIT: drop photos into images/robotic-hand/ and update captions. -->
+    <div class="gallery">
+      <figure><img src="../images/robotic-hand/1.jpg" alt="Data glove" onerror="this.parentElement.remove()"><figcaption>Flex-sensor data glove</figcaption></figure>
+      <figure><img src="../images/robotic-hand/2.jpg" alt="PCB layout" onerror="this.parentElement.remove()"><figcaption>Altium PCB layout</figcaption></figure>
+      <figure><img src="../images/robotic-hand/3.jpg" alt="Breadboard prototype" onerror="this.parentElement.remove()"><figcaption>Early breadboard prototype</figcaption></figure>
+    </div>
+  </section>
+
+  <nav class="pager" aria-label="More projects">
+    <a href="exoskeleton.html"><small>← Previous</small><strong>EXO Exoskeleton Leg</strong></a>
+    <a class="next" href="pid-spoon.html"><small>Next →</small><strong>PID Tremor-Stabilizing Spoon</strong></a>
+  </nav>
+</main>
+
+<footer><div class="wrap">© <span data-year>2026</span> Luis Lopez Rondon</div></footer>
+
+</body>
+</html>

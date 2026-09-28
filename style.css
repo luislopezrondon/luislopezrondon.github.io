@@ -356,7 +356,7 @@ footer { border-top: 1px solid var(--border); padding: 32px 0; color: var(--mute
 }
 @media (max-width: 900px) {
   .project-body { grid-template-columns: minmax(0, 1fr); gap: 40px; margin-top: 48px; }
-  .specs { position: static; }
+    .specs { position: static; order: -1; }
 }
 @media (max-width: 800px) {
   .about { grid-template-columns: 1fr; gap: 32px; }

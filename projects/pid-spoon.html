@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>PID Tremor-Stabilizing Spoon | Luis Lopez Rondon</title>
-  <meta name="description" content="Custom PCB for a tremor-stabilizing spoon, used to teach PCB design to newer IEEE at USF EXO members.">
+  <title>PID-Stabilized Parkinson's Spoon | Luis Lopez Rondon</title>
+  <meta name="description" content="Custom PCB for an IEEE at USF EXO assistive spoon that keeps itself level during hand tremors, also used to teach PCB design.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
@@ -29,9 +29,9 @@
 
   <header class="project-hero">
     <span class="status">In progress · EXO project</span>
-    <h1>PID Tremor-Stabilizing Spoon</h1>
-    <p class="lead">A handheld spoon that counteracts Parkinson's tremors. I'm designing its custom PCB and using the board to teach newer EXO members PCB design.</p>
-    <div class="tags"><span>ESP32-C3</span><span>PID control</span><span>Altium Designer</span><span>Boost converter</span><span>Battery charging</span></div>
+    <h1>PID-Stabilized Parkinson's Spoon</h1>
+    <p class="lead">An assistive spoon for people with hand tremors. I designed the custom PCB that runs it, and used the project to teach newer EXO members PCB design.</p>
+    <div class="tags"><span>STM32G431</span><span>PID control</span><span>Altium Designer</span><span>Boost converter</span><span>Battery charging</span></div>
     <div class="btns">
       <a class="btn primary" href="https://github.com/luislopezrondon/pid-spoon" target="_blank" rel="noopener">View on GitHub →</a>
     </div>
@@ -44,29 +44,30 @@
   <dl class="meta">
     <div><dt>Team</dt><dd>IEEE at USF · EXO</dd></div>
     <div><dt>My role</dt><dd>PCB design &amp; teaching</dd></div>
-    <div><dt>MCU</dt><dd>ESP32-C3-MINI-1</dd></div>
+    <div><dt>MCU</dt><dd>STM32G431</dd></div>
     <div><dt>Status</dt><dd>In progress</dd></div>
   </dl>
 
   <div class="project-body">
     <article class="prose">
       <h2>Overview</h2>
-      <p>The spoon is an EXO project to help people with Parkinson's eat more steadily by actively counteracting their tremors. My part is the electronics: I'm designing the custom PCB that runs it, and I'm using that board as the example project for teaching newer EXO members how to design PCBs.</p>
+      <p>The PID-Stabilized Parkinson's Spoon is an IEEE at USF EXO project to build an assistive spoon for people with hand tremors. An IMU on the handle measures the hand's motion. A microcontroller runs a PID loop that drives servos to tilt the spoon head the opposite way, keeping it level while the hand shakes.</p>
+      <p>My part was the custom PCB that runs the whole device; the control loop was handled separately.</p>
 
       <h2>The PCB</h2>
-      <p>The board is built around the <strong>ESP32-C3-MINI-1-N4</strong>. To keep it small, there's no USB data connection: firmware is flashed over UART (TX/RX), and the USB-C port is used only for charging.</p>
-      <p>It runs from a 1S LiPo. A TP4056 handles charging over USB-C, a DW01A + FS8205 pair protects the cell from over-charge, over-discharge, and shorts, and a boost converter steps the battery up for the servos.</p>
+      <p>The board is built around an <strong>STM32G431</strong> microcontroller and an <strong>LSM6DSV16X</strong> 6-axis IMU. It runs off a single-cell (1S) LiPo, with USB-C for charging and programming.</p>
+      <p>The battery circuitry uses a TP4056 charger with DW01A and FS8205 protection against overcharge, over-discharge and short circuits. Since a 1S cell is only about 3.7V and the servos need more, I designed a custom 5V boost converter to give them their own power rail.</p>
 
       <div class="flow-label">Power path</div>
       <div class="flow">
         <div class="node"><small>Charge</small><strong>USB-C + TP4056</strong></div>
         <div class="node"><small>Store</small><strong>1S LiPo + DW01A / FS8205</strong></div>
-        <div class="node"><small>Boost</small><strong>Boost converter</strong></div>
+        <div class="node"><small>Boost</small><strong>5V boost converter</strong></div>
         <div class="node"><small>Load</small><strong>Stabilizing servos</strong></div>
       </div>
 
       <h2>Teaching PCB design</h2>
-      <p>I use the spoon board as the running example in an Altium workshop I run for IEEE at USF EXO. About 10 members have gone through it so far. They walked away with the basics of PCB design, the full design process, how to research parts and read datasheets, and their first board: a 6-axis IMU.</p>
+      <p>I also used the spoon as a teaching project. I led an Altium workshop where about 10 newer EXO members learned the PCB design process: researching parts, reading datasheets, drawing schematics and laying out boards. Each of them designed their first PCB, a 6-axis IMU board.</p>
       <figure class="pair">
         <div class="pair-imgs">
           <img src="../images/pid-spoon/workshop-1.jpg" alt="Teaching the Altium PCB design workshop" onerror="this.remove()">
@@ -85,12 +86,13 @@
     <aside class="specs">
       <h3>Key specs</h3>
       <dl>
-        <div><dt>MCU</dt><dd>ESP32-C3-MINI-1-N4</dd></div>
+        <div><dt>MCU</dt><dd>STM32G431</dd></div>
+        <div><dt>IMU</dt><dd>LSM6DSV16X</dd></div>
         <div><dt>Battery</dt><dd>1S LiPo</dd></div>
         <div><dt>Charging</dt><dd>TP4056 · USB-C</dd></div>
         <div><dt>Protection</dt><dd>DW01A + FS8205</dd></div>
-        <div><dt>Servo power</dt><dd>Boost converter</dd></div>
-        <div><dt>Programming</dt><dd>UART (TX/RX)</dd></div>
+        <div><dt>Servo power</dt><dd>5V boost converter</dd></div>
+        <div><dt>Programming</dt><dd>USB-C</dd></div>
         <div><dt>EDA</dt><dd>Altium Designer</dd></div>
       </dl>
     </aside>

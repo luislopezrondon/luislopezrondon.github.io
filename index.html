@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Luis Lopez Rondon | Electrical Engineering</title>
-  <meta name="description" content="Portfolio of Luis Lopez Rondon, Electrical Engineering student at USF focused on PCB design, embedded systems, and robotics.">
+  <meta name="description" content="Portfolio of Luis Lopez Rondon, Electrical Engineering student at USF and Electrical Systems Lead on IEEE at USF's EXO team. Hardware and embedded engineering, robotics, and analog design.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
@@ -35,8 +35,8 @@
       <a class="btn" href="https://github.com/luislopezrondon" target="_blank" rel="noopener">GitHub</a>
     </div>
     <div class="stats">
-      <div><strong>4</strong><span>Projects in progress</span></div>
-      <div><strong>IEEE EXO</strong><span>Electronics &amp; circuitry lead</span></div>
+      <div><strong>Electrical Systems Lead</strong><span>IEEE at USF · EXO</span></div>
+      <div><strong>4</strong><span>Featured projects</span></div>
     </div>
   </div>
 </header>
@@ -48,15 +48,16 @@
         <span class="label">01 / About</span>
         <h2>Building the electronics that make robots move safely.</h2>
       </div>
-      <p>I'm an Electrical Engineering student at USF, expected to graduate in May 2029. I lead electronics and circuitry for IEEE at USF's EXO team, where I work on battery selection, power distribution, and emergency-stop design for an exoskeleton, and I teach PCB design to newer members.</p>
-      <p>Outside the team, I design custom PCBs in Altium for my own projects. I'm looking for internships in embedded systems, hardware, or robotics.</p>
+      <p>I'm an Electrical Engineering student at USF, expected to graduate in May 2029. Since August 2026 I've been the Electrical Systems Lead for IEEE at USF's EXO team, where I lead an electrical team with three sub-teams and coordinate with the Controls team on a powered exoskeleton. My part is the power system: battery selection, power distribution, and emergency-stop design. I also teach PCB design to newer members.</p>
+      <p>Outside the team, I design custom PCBs for my own projects. My interests are hardware and embedded engineering, robotics, and analog design, and eventually RF. I'm looking for internships in embedded systems, hardware, or robotics.</p>
     </div>
     <dl class="facts">
       <div><dt>Degree</dt><dd>BS Electrical Engineering</dd></div>
       <div><dt>School</dt><dd>University of South Florida</dd></div>
       <div><dt>Graduating</dt><dd>May 2029</dd></div>
       <div><dt>Previously</dt><dd>AA, Hillsborough College</dd></div>
-      <div><dt>Role</dt><dd>Electronics Lead, IEEE EXO</dd></div>
+      <div><dt>Role</dt><dd>Electrical Systems Lead, IEEE at USF EXO</dd></div>
+      <div><dt>Interests</dt><dd>Hardware &amp; embedded, robotics, analog, RF</dd></div>
       <div><dt>Seeking</dt><dd>Internship or research opportunity</dd></div>
     </dl>
   </div>
@@ -70,25 +71,28 @@
       <p>Click a project for more information, design decisions, system diagrams, and build photos.</p>
     </div>
 
+    <h3 class="group-title reveal">Team Projects <span>IEEE at USF EXO</span></h3>
     <div class="grid reveal">
       <a class="card" href="projects/exoskeleton.html">
-        <div class="thumb" data-label="// exoskeleton"><img src="images/exoskeleton.jpg" alt="Exoskeleton leg" onerror="this.remove()"></div>
+        <div class="thumb" data-label="// exoskeleton"><img src="images/exoskeleton.jpg" alt="Lower-limb exoskeleton prototype" onerror="this.remove()"></div>
         <div class="card-body">
-          <span class="status">In progress · EXO main project</span>
-          <h3>EXO Exoskeleton Leg</h3>
-          <p>Leading electrical design for an exoskeleton driven by 48V CubeMars AK80-9 actuators: battery selection, DC-DC power rails, and a hardware e-stop that cuts motor power while keeping control electronics alive.</p>
-          <div class="tags"><span>E-stop</span><span>Jetson Orin Nano</span><span>Teensy</span><span>IMU</span><span>Custom Li-ion pack</span></div>
+          <span class="status design">Design phase</span>
+          <h4>Lower-Limb Exoskeleton</h4>
+          <p class="role">Electrical Systems Lead</p>
+          <p>A one-sided powered exoskeleton that assists the hip and knee for people with an uneven gait. I lead the electrical team and own the 48V power system and e-stop.</p>
+          <div class="tags"><span>Power electronics</span><span>Battery design</span><span>CAN bus</span><span>Jetson Orin Nano</span><span>Teensy 4.1</span><span>MATLAB</span><span>Safety systems</span></div>
           <span class="more">Read more <span class="arrow">→</span></span>
         </div>
       </a>
 
-      <a class="card" href="projects/robotic-hand.html">
-        <div class="thumb" data-label="// robotic-hand"><img src="images/robotic-hand.jpg" alt="Robotic hand" onerror="this.remove()"></div>
+      <a class="card" href="projects/mime.html">
+        <div class="thumb" data-label="// mime"><img src="images/robotic-hand.jpg" alt="Mime robotic hand" onerror="this.remove()"></div>
         <div class="card-body">
-          <span class="status">In progress · EXO project</span>
-          <h3>Mimetic Robotic Hand</h3>
-          <p>A five-servo robotic hand that mirrors a human hand in real time, controlled by both a flex-sensor data glove and computer vision.</p>
-            <div class="tags"><span>ESP32-S3</span><span>PCA9685</span><span>Altium Designer</span><span>OpenCV</span></div>
+          <span class="status working">Prototype working</span>
+          <h4>Mime — Robotic Hand</h4>
+          <p class="role">Electrical Lead</p>
+          <p>A five-finger robotic hand controlled by a flex-sensor data glove or by computer vision. V1 works on a breadboard and the V2 custom PCB is in progress.</p>
+          <div class="tags"><span>ESP32-S3</span><span>PCB design</span><span>Altium</span><span>KiCad</span><span>OpenCV</span><span>Servo control</span><span>I2C</span><span>Analog sensing</span></div>
           <span class="more">Read more <span class="arrow">→</span></span>
         </div>
       </a>
@@ -96,21 +100,26 @@
       <a class="card" href="projects/pid-spoon.html">
         <div class="thumb" data-label="// pid-spoon"><img src="images/pid-spoon.jpg" alt="PID spoon PCB" onerror="this.remove()"></div>
         <div class="card-body">
-       <span class="status">In progress · EXO project</span>
-          <h3>PID-Stabilized Parkinson's Spoon</h3>
-          <p>An assistive spoon that tilts against hand tremors using an IMU, PID control and servos. I designed the custom PCB, and led an Altium workshop for about 10 newer EXO members around it.</p>
-          <div class="tags"><span>STM32G431</span><span>PID control</span><span>Altium Designer</span><span>Boost converter</span><span>Battery charging</span></div>
+          <span class="status">In progress</span>
+          <h4>PID Spoon + Altium PCB Workshop</h4>
+          <p class="role">PCB designer &amp; workshop instructor</p>
+          <p>A stabilizing spoon for people with Parkinson's tremors. I designed its custom PCB and use it as the teaching example in an Altium workshop for EXO members.</p>
+          <div class="tags"><span>STM32</span><span>IMU</span><span>Battery management</span><span>Altium</span><span>Teaching/Leadership</span></div>
           <span class="more">Read more <span class="arrow">→</span></span>
         </div>
       </a>
+    </div>
 
+    <h3 class="group-title reveal">Personal Projects</h3>
+    <div class="grid reveal">
       <a class="card" href="projects/spectrum-analyzer.html">
         <div class="thumb" data-label="// spectrum-analyzer"><img src="images/spectrum-analyzer.jpg" alt="Audio spectrum analyzer" onerror="this.remove()"></div>
         <div class="card-body">
-          <span class="status">In progress · Personal project</span>
-          <h3>Audio Spectrum Analyzer</h3>
-          <p>Real-time FFT analysis of USB audio streamed into a Teensy 4.0, visualized on a TFT display.</p>
-          <div class="tags"><span>Teensy 4.0</span><span>FFT</span><span>C++</span></div>
+          <span class="status working">Prototype working</span>
+          <h4>Audio Spectrum Analyzer</h4>
+          <p class="role">Designer &amp; builder · PCB revision with one teammate</p>
+          <p>A real-time audio spectrum analyzer, built to learn DSP and FFTs from the ground up. The Teensy prototype works and the custom PCB revision is in schematic capture.</p>
+          <div class="tags"><span>DSP</span><span>FFT</span><span>Teensy</span><span>STM32</span><span>Audio codec</span><span>Analog design</span><span>PCB design</span></div>
           <span class="more">Read more <span class="arrow">→</span></span>
         </div>
       </a>

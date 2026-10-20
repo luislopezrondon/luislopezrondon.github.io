@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>PID-Stabilized Parkinson's Spoon | Luis Lopez Rondon</title>
-  <meta name="description" content="Custom PCB for an IEEE at USF EXO assistive spoon that keeps itself level during hand tremors, also used to teach PCB design.">
+  <title>PID Spoon + Altium PCB Workshop | Luis Lopez Rondon</title>
+  <meta name="description" content="Custom PCB for an IEEE at USF EXO stabilizing spoon for Parkinson's tremors, also used as the teaching example in an Altium PCB workshop.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
@@ -28,10 +28,10 @@
   <a class="back" href="../index.html#projects">← All projects</a>
 
   <header class="project-hero">
-    <span class="status">In progress · EXO project</span>
-    <h1>PID-Stabilized Parkinson's Spoon</h1>
-    <p class="lead">An assistive spoon for people with hand tremors. I designed the custom PCB that runs it, and used the project to teach newer EXO members PCB design.</p>
-    <div class="tags"><span>STM32G431</span><span>PID control</span><span>Altium Designer</span><span>Boost converter</span><span>Battery charging</span></div>
+    <span class="status">In progress · Team project</span>
+    <h1>PID Spoon + Altium PCB Workshop</h1>
+    <p class="lead">A stabilizing spoon for people with Parkinson's tremors, which uses an IMU and PID control to keep the spoon steady. I designed the custom PCB and use it as the teaching example in an Altium workshop I run for IEEE at USF EXO.</p>
+    <div class="tags"><span>STM32</span><span>IMU</span><span>Battery management</span><span>Altium</span><span>Teaching/Leadership</span></div>
     <div class="btns">
       <a class="btn primary" href="https://github.com/luislopezrondon/pid-spoon" target="_blank" rel="noopener">View on GitHub →</a>
     </div>
@@ -43,43 +43,44 @@
 
   <dl class="meta">
     <div><dt>Team</dt><dd>IEEE at USF · EXO</dd></div>
-    <div><dt>My role</dt><dd>PCB design &amp; teaching</dd></div>
+    <div><dt>My role</dt><dd>PCB designer &amp; workshop instructor</dd></div>
     <div><dt>MCU</dt><dd>STM32G431</dd></div>
-    <div><dt>Status</dt><dd>In progress</dd></div>
+    <div><dt>Status</dt><dd>PCB design in progress</dd></div>
   </dl>
 
   <div class="project-body">
     <article class="prose">
       <h2>Overview</h2>
-      <p>The PID-Stabilized Parkinson's Spoon is an IEEE at USF EXO project to build an assistive spoon for people with hand tremors. An IMU on the handle measures the hand's motion. A microcontroller runs a PID loop that drives servos to tilt the spoon head the opposite way, keeping it level while the hand shakes.</p>
-      <p>My part was the custom PCB that runs the whole device; the control loop was handled separately.</p>
+      <p>An IMU on the handle measures the hand's motion. A microcontroller runs a PID loop that drives servos to tilt the spoon head the opposite way, keeping it steady while the hand shakes.</p>
+      <p>My part was the custom PCB that runs the whole device, not the control loop.</p>
 
       <h2>The PCB</h2>
-      <p>The board is built around an <strong>STM32G431</strong> microcontroller and an <strong>LSM6DSV16X</strong> 6-axis IMU. It runs off a single-cell (1S) LiPo, with USB-C for charging and programming.</p>
-      <p>The battery circuitry uses a TP4056 charger with DW01A and FS8205 protection against overcharge, over-discharge and short circuits. Since a 1S cell is only about 3.7V and the servos need more, I designed a custom 5V boost converter to give them their own power rail.</p>
+      <p>The board is built around an <strong>STM32G431</strong> microcontroller and an <strong>LSM6DSV16X</strong> IMU. It runs off a 1S LiPo, with a boost converter for the servos and USB-C for charging and flashing firmware.</p>
+      <p>The battery circuitry uses a TP4056 charger with DW01A and FS8205 battery protection.</p>
 
       <div class="flow-label">Power path</div>
       <div class="flow">
         <div class="node"><small>Charge</small><strong>USB-C + TP4056</strong></div>
         <div class="node"><small>Store</small><strong>1S LiPo + DW01A / FS8205</strong></div>
-        <div class="node"><small>Boost</small><strong>5V boost converter</strong></div>
+        <div class="node"><small>Boost</small><strong>Boost converter</strong></div>
         <div class="node"><small>Load</small><strong>Stabilizing servos</strong></div>
       </div>
 
-      <h2>Teaching PCB design</h2>
-      <p>I also used the spoon as a teaching project. I led an Altium workshop where about 10 newer EXO members learned the PCB design process: researching parts, reading datasheets, drawing schematics and laying out boards. Each of them designed their first PCB, a 6-axis IMU board.</p>
+      <h2>Altium workshop</h2>
+      <p>I run an Altium workshop for IEEE at USF EXO and use this board as the teaching example. About 10 members have completed it so far. They learned PCB design basics, the design process, part research, and datasheet reading, and each designed their first board, a 6-axis IMU board.</p>
       <figure class="pair">
         <div class="pair-imgs">
-          <img src="../images/pid-spoon/workshop-1.jpg" alt="Teaching the Altium PCB design workshop" onerror="this.remove()">
-          <img src="../images/pid-spoon/workshop-2.jpg" alt="Teaching the Altium PCB design workshop" onerror="this.remove()">
+          <img src="../images/pid-spoon/workshop-1.jpg" alt="Luis teaching the Altium PCB design workshop" onerror="this.remove()">
+          <img src="../images/pid-spoon/workshop-2.jpg" alt="Workshop attendees designing their first PCBs in Altium" onerror="this.remove()">
         </div>
-        <figcaption>Teaching the Altium workshop for IEEE at USF EXO</figcaption>
+        <figcaption>The Altium workshop for IEEE at USF EXO</figcaption>
       </figure>
+      <!-- [TODO] photos of the board and the workshop: confirm the images in images/pid-spoon/ are the ones you want, or replace them -->
 
       <h2>What's next</h2>
       <ul>
-        <li>Finalize the layout and order boards</li>
-        <li>Assemble and test the PCB</li>
+        <li>Finish the PCB design</li>
+        <li>Assemble and test the board</li>
       </ul>
     </article>
 
@@ -91,9 +92,10 @@
         <div><dt>Battery</dt><dd>1S LiPo</dd></div>
         <div><dt>Charging</dt><dd>TP4056 · USB-C</dd></div>
         <div><dt>Protection</dt><dd>DW01A + FS8205</dd></div>
-        <div><dt>Servo power</dt><dd>5V boost converter</dd></div>
+        <div><dt>Servo power</dt><dd>Boost converter</dd></div>
         <div><dt>Programming</dt><dd>USB-C</dd></div>
         <div><dt>EDA</dt><dd>Altium Designer</dd></div>
+        <div><dt>Workshop</dt><dd>~10 members completed so far</dd></div>
       </dl>
     </aside>
   </div>
@@ -108,8 +110,8 @@
   </section>
 
   <nav class="pager" aria-label="More projects">
-    <a href="robotic-hand.html"><small>← Previous</small><strong>Mimetic Robotic Hand</strong></a>
-    <a class="next" href="spectrum-analyzer.html"><small>Next →</small><strong>Audio Spectrum Analyzer</strong></a>
+    <a href="spectrum-analyzer.html"><small>← Previous</small><strong>Audio Spectrum Analyzer</strong></a>
+    <a class="next" href="exoskeleton.html"><small>Next →</small><strong>Lower-Limb Exoskeleton</strong></a>
   </nav>
 </main>
 

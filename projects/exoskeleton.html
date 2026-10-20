@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>EXO Exoskeleton Leg | Luis Lopez Rondon</title>
-  <meta name="description" content="Electrical design for a 48V lower-limb exoskeleton: battery, DC-DC power rails, and a hardware e-stop.">
+  <title>Lower-Limb Exoskeleton | Luis Lopez Rondon</title>
+  <meta name="description" content="Electrical design for a one-sided powered exoskeleton that assists the hip and knee: 48V battery, DC-DC power rails, and a motor-bus e-stop.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
@@ -28,39 +28,45 @@
   <a class="back" href="../index.html#projects">← All projects</a>
 
   <header class="project-hero">
-    <span class="status">In progress · Team project</span>
-    <h1>EXO Exoskeleton Leg</h1>
-    <p class="lead">Leading electrical design for a powered exoskeleton leg driven by 48V CubeMars AK80-9 actuators: the battery, DC-DC power rails, and a hardware e-stop that cuts motor power while keeping control electronics alive.</p>
-    <div class="tags"><span>E-stop</span><span>Jetson Orin Nano</span><span>Teensy</span><span>IMU</span><span>Custom Li-ion pack</span></div>
+    <span class="status design">Design phase · Team project</span>
+    <h1>Lower-Limb Exoskeleton</h1>
+    <p class="lead">A one-sided (unilateral) powered exoskeleton that assists the hip and knee for people with an uneven gait. I lead the electrical team, and the power system and safety design are my main area.</p>
+    <div class="tags"><span>Power electronics</span><span>Battery design</span><span>CAN bus</span><span>Jetson Orin Nano</span><span>Teensy 4.1</span><span>MATLAB</span><span>Safety systems</span></div>
   </header>
 
   <figure class="cover">
-    <img src="../images/exoskeleton.jpg" alt="Exoskeleton leg" onerror="this.parentElement.remove()">
+    <img src="../images/exoskeleton.jpg" alt="Lower-limb exoskeleton prototype" onerror="this.parentElement.remove()">
   </figure>
 
   <dl class="meta">
-    <div><dt>Role</dt><dd>Electronics &amp; Circuitry Lead</dd></div>
+    <div><dt>Role</dt><dd>Electrical Systems Lead</dd></div>
     <div><dt>Team</dt><dd>IEEE at USF · EXO</dd></div>
     <div><dt>Focus</dt><dd>Power &amp; safety</dd></div>
-    <div><dt>Status</dt><dd>In progress</dd></div>
+    <div><dt>Status</dt><dd>Design / bench testing</dd></div>
   </dl>
 
   <div class="project-body">
     <article class="prose">
       <h2>Overview</h2>
-      <p>EXO is a student team within IEEE at USF building a powered lower-limb exoskeleton that assists the hip and knee for people with an uneven gait. The leg is driven by four CubeMars AK80-9 actuators on a 48V bus, with a Jetson Orin Nano and Teensy microcontrollers handling compute and control.</p>
-      <p>As Electronics &amp; Circuitry Lead, I'm responsible for the electrical side of the build: the battery, power distribution, the emergency stop, and the PCB. I also teach PCB design to newer members of the team.</p>
+      <p>EXO is a student team within IEEE at USF building a powered lower-limb exoskeleton that assists the hip and knee for people with an uneven gait. The design is unilateral: it powers one leg only.</p>
+      <p>Since August 2026 I've been the Electrical Systems Lead. I lead an electrical team with three sub-teams and coordinate with the Controls team.</p>
+      <!-- [TODO] team size -->
+
+      <h2>Actuation</h2>
+      <p>Two CubeMars AK80-9 actuators (48V) drive the hip and knee, and the ankle is passive. The assistance envelope is &plusmn;15&nbsp;N&middot;m per joint, based on gait data from OpenSim modeling done by a teammate. The current assist strategy compensates the full required joint torque, up to a 15&nbsp;N&middot;m cap.</p>
+
+      <h2>Compute and control</h2>
+      <p>A Jetson Orin Nano handles high-level compute, and Teensy 4.1 microcontrollers handle low-level motor control, with an IMU for sensing. The Jetson talks to the Teensys over USB serial. The motors share a single CAN bus, and I'm evaluating a CubeMars driver board that accepts UART and handles CAN internally.</p>
 
       <h2>Power architecture</h2>
-      <p>Everything runs from a single 48V pack. Each AK80-9 can pull up to 28A at peak, so instead of designing around four actuators at full peak, I'm specifying torque requirements so each one draws closer to 12–15A. That keeps the battery, wiring, and protection requirements realistic for a student budget.</p>
-      <p>From the pack, power splits into two branches:</p>
+      <p>Everything runs from a single 48V pack. DC-DC converters step 48V down for the Jetson and to 3.3V for the Teensys and logic. From the pack, power splits into two branches:</p>
 
       <div class="flow-label">Motor branch · switched by the e-stop</div>
       <div class="flow">
         <div class="node"><small>Source</small><strong>48V battery pack</strong></div>
-        <div class="node"><small>Safety</small><strong>Hardware e-stop</strong></div>
+        <div class="node"><small>Safety</small><strong>E-stop</strong></div>
         <div class="node"><small>Bus</small><strong>48V motor bus</strong></div>
-        <div class="node"><small>Load</small><strong>4× AK80-9 actuators</strong></div>
+        <div class="node"><small>Load</small><strong>2× AK80-9 actuators</strong></div>
       </div>
 
       <div class="flow-label">Logic branch · always on</div>
@@ -71,49 +77,52 @@
       </div>
 
       <h2>Emergency stop</h2>
-      <p>The e-stop is wired to cut the motor bus only. The DC-DC converters tap off the battery <em>ahead</em> of it, so hitting the e-stop kills power to the actuators immediately while the Jetson and Teensys stay powered and the system doesn't have to reboot.</p>
-      <div class="callout"><strong>Staged approach:</strong> a software e-stop during testing and development, and a hardware e-stop that physically breaks the motor circuit in the final build.</div>
+      <p>The e-stop cuts only the motor bus. The logic branch taps off ahead of it, so the Jetson and Teensys stay powered when the e-stop is hit and the system doesn't have to reboot.</p>
+      <div class="callout"><strong>Staged approach:</strong> a software e-stop for development and a hardware e-stop for the final build. For the hardware version I favor a MOSFET switch over a mechanical contactor because it's smaller, which matters in a wearable.</div>
 
       <h2>Battery</h2>
-      <p>The pack needs to deliver 48V with at least 5Ah of capacity and a maximum discharge rating above 100A. After weighing pre-built e-bike and drone packs against building our own, we went with a custom 13S1P Li-ion pack. It's cheaper, more configurable, and takes up less space than a pre-built pack.</p>
+      <p>The pack needs to deliver 48V with at least 5Ah of capacity. I chose a custom pack over pre-built e-bike or drone packs for cost, configurability, and size. I'm still evaluating two layouts: a custom 13S1P pack, or a 6S2P pack with a 24→48V boost converter.</p>
+      <p>To size it, I ran a MATLAB model of battery current, which gave about 10A maximum and 3–4A mean. This corrected an earlier estimate that had wrongly assumed battery current equals motor current.</p>
+      <!-- [TODO] any test results -->
 
       <h2>PCB plan</h2>
-      <p>We're prototyping with pre-made modules (buck converters, an IMU breakout, and so on) so the system can be tested quickly. Once the design is proven, it moves onto a custom PCB.</p>
+      <p>We're prototyping with pre-made modules (buck converters, an IMU breakout, and so on) so the system can be tested quickly. After testing, the design moves onto a custom PCB.</p>
 
       <h2>What's next</h2>
       <ul>
-        <li>Build the custom battery pack</li>
-        <li>Build and test the hardware e-stop</li>
-        <li>Design the custom power and control PCB</li>
+        <li>Decide between the 13S1P and 6S2P battery layouts</li>
+        <li>Bench-test the power system and e-stop</li>
+        <li>Move the proven design onto a custom PCB</li>
       </ul>
     </article>
 
     <aside class="specs">
       <h3>Key specs</h3>
       <dl>
-        <div><dt>Actuators</dt><dd>4× CubeMars AK80-9</dd></div>
-        <div><dt>Bus voltage</dt><dd>48V</dd></div>
-        <div><dt>Actuator current</dt><dd>28A peak · ~12–15A target</dd></div>
-        <div><dt>Battery</dt><dd>Custom 13S1P Li-ion · 48V · ≥5Ah · &gt;100A</dd></div>
-        <div><dt>Logic rails</dt><dd>Jetson Orin Nano · 3.3V (Teensy)</dd></div>
-        <div><dt>E-stop</dt><dd>Software (dev) → hardware (final)</dd></div>
+        <div><dt>Actuators</dt><dd>2× CubeMars AK80-9 (48V) · hip and knee</dd></div>
+        <div><dt>Assist envelope</dt><dd>&plusmn;15 N&middot;m per joint</dd></div>
+        <div><dt>Compute</dt><dd>Jetson Orin Nano · Teensy 4.1</dd></div>
+        <div><dt>Links</dt><dd>USB serial (Jetson → Teensy) · shared CAN bus</dd></div>
+        <div><dt>Battery</dt><dd>48V Li-ion · ≥5Ah · 13S1P or 6S2P (evaluating)</dd></div>
+        <div><dt>Battery current (model)</dt><dd>~10A max · 3–4A mean</dd></div>
+        <div><dt>E-stop</dt><dd>Software (dev) → hardware (final) · motor bus only</dd></div>
       </dl>
     </aside>
   </div>
 
   <section class="gallery-section">
     <h2>Gallery</h2>
-    <!-- Add photos to images/exoskeleton/ once parts arrive. This section stays hidden until then. -->
+    <!-- [TODO] add exoskeleton photos as images/projects/exoskeleton-1.jpg, -2.jpg, -3.jpg and update the captions. This section stays hidden until the files exist. -->
     <div class="gallery">
-      <figure><img src="../images/exoskeleton/1.jpg" alt="Power distribution wiring" onerror="this.parentElement.remove()"><figcaption>Power distribution wiring</figcaption></figure>
-      <figure><img src="../images/exoskeleton/2.jpg" alt="E-stop test setup" onerror="this.parentElement.remove()"><figcaption>E-stop test setup</figcaption></figure>
-      <figure><img src="../images/exoskeleton/3.jpg" alt="Leg assembly" onerror="this.parentElement.remove()"><figcaption>Leg assembly</figcaption></figure>
+      <figure><img src="../images/projects/exoskeleton-1.jpg" alt="Exoskeleton build photo 1" onerror="this.parentElement.remove()"><figcaption>Exoskeleton build</figcaption></figure>
+      <figure><img src="../images/projects/exoskeleton-2.jpg" alt="Exoskeleton build photo 2" onerror="this.parentElement.remove()"><figcaption>Exoskeleton build</figcaption></figure>
+      <figure><img src="../images/projects/exoskeleton-3.jpg" alt="Exoskeleton build photo 3" onerror="this.parentElement.remove()"><figcaption>Exoskeleton build</figcaption></figure>
     </div>
   </section>
 
   <nav class="pager" aria-label="More projects">
-    <a href="spectrum-analyzer.html"><small>← Previous</small><strong>Audio Spectrum Analyzer</strong></a>
-    <a class="next" href="robotic-hand.html"><small>Next →</small><strong>Mimetic Robotic Hand</strong></a>
+    <a href="pid-spoon.html"><small>← Previous</small><strong>PID Spoon + Altium PCB Workshop</strong></a>
+    <a class="next" href="mime.html"><small>Next →</small><strong>Mime — Robotic Hand</strong></a>
   </nav>
 </main>
 

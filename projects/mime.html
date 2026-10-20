@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mime — Robotic Hand | Luis Lopez Rondon</title>
+  <meta name="description" content="A five-finger robotic hand controlled by a flex-sensor data glove and by OpenCV computer vision, built on an ESP32-S3.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <script src="../script.js"></script>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="../index.html" class="logo"><span class="logo-mark">LR</span><span class="logo-text">Luis Lopez Rondon</span></a>
+    <ul>
+      <li><a href="../index.html#about">About</a></li>
+      <li><a href="../index.html#projects">Projects</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="wrap project">
+  <a class="back" href="../index.html#projects">← All projects</a>
+
+  <header class="project-hero">
+    <span class="status working">Prototype working · Team project</span>
+    <h1>Mime — Robotic Hand</h1>
+    <p class="lead">A 5-finger robotic hand controlled by a flex-sensor data glove and by computer vision. V1 works on a breadboard, and the custom PCB V2 is in progress.</p>
+    <div class="tags"><span>ESP32-S3</span><span>PCB design</span><span>Altium</span><span>KiCad</span><span>OpenCV</span><span>Servo control</span><span>I2C</span><span>Analog sensing</span></div>
+    <div class="btns">
+      <a class="btn primary" href="https://github.com/luislopezrondon/robotic-hand" target="_blank" rel="noopener">View on GitHub →</a>
+    </div>
+  </header>
+
+  <figure class="cover">
+    <img src="../images/robotic-hand.jpg" alt="Mime robotic hand" onerror="this.parentElement.remove()">
+  </figure>
+
+  <dl class="meta">
+    <div><dt>Role</dt><dd>Electrical Lead</dd></div>
+    <div><dt>Team</dt><dd>IEEE at USF · EXO</dd></div>
+    <div><dt>MCU</dt><dd>ESP32-S3</dd></div>
+    <div><dt>Status</dt><dd>V1 breadboard working · V2 PCB in progress</dd></div>
+  </dl>
+
+  <div class="project-body">
+    <article class="prose">
+      <h2>Overview</h2>
+      <p>Five flex sensors on a glove are read by the ESP32's ADC, which drives five MG996R servos, one per finger, through a PCA9685 I2C servo driver. A second control mode uses OpenCV on a laptop to track a hand and send finger positions to the ESP32 over USB.</p>
+
+      <div class="flow-label">Signal path</div>
+      <div class="flow">
+        <div class="node"><small>Input</small><strong>Flex glove or OpenCV (laptop)</strong></div>
+        <div class="node"><small>Control</small><strong>ESP32</strong></div>
+        <div class="node"><small>Drive</small><strong>PCA9685 over I2C</strong></div>
+        <div class="node"><small>Actuate</small><strong>5× MG996R servos</strong></div>
+      </div>
+
+      <h2>V1 → V2</h2>
+      <p>On V1, the flex-sensor connections came loose on the breadboard during testing. V2 solders the glove's flex sensors directly to the PCB, for a more streamlined and reliable design.</p>
+      <!-- [TODO] photos/video of V1: images/projects/mime-1.jpg and images/projects/mime-demo.gif -->
+
+      <h2>V2 PCB</h2>
+      <p>I'm designing V2 in Altium, which I'm learning for this board. An earlier version was done in KiCad around an ESP32-WROOM-32. The V2 design includes:</p>
+      <ul>
+        <li><strong>ESP32-S3-WROOM-1U-N8R8</strong> module with native USB and a U.FL antenna connector</li>
+        <li>Flex sensors on GPIO4–8 (ADC1), chosen to avoid strapping and PSRAM pins</li>
+        <li>PCA9685 on I2C (GPIO1 SDA, GPIO2 SCL) with 4.7kΩ pull-ups, at address <code>0x40</code></li>
+        <li>USB-C connector, and a reset circuit with an EN pull-up, RC delay, and reset button</li>
+      </ul>
+      <!-- [TODO] render of the V2 PCB: images/projects/mime-2.jpg -->
+
+      <h2>Power</h2>
+      <p>The servos are powered from a 6V supply, and an AMS1117 LDO provides the 3.3V logic rail. Earlier revisions used a 3S LiPo with an MP1584EN buck converter. I designed that buck stage, including the feedback, compensation, and frequency-setting components, before simplifying the power design.</p>
+
+      <div class="flow-label">Servo power</div>
+      <div class="flow">
+        <div class="node"><small>Source</small><strong>6V supply</strong></div>
+        <div class="node"><small>Load</small><strong>5× MG996R servos</strong></div>
+      </div>
+
+      <div class="flow-label">Logic power</div>
+      <div class="flow">
+        <div class="node"><small>Source</small><strong>6V supply</strong></div>
+        <div class="node"><small>Regulate</small><strong>AMS1117 LDO</strong></div>
+        <div class="node"><small>Rail</small><strong>3.3V → ESP32-S3 &amp; logic</strong></div>
+      </div>
+
+      <h2>A safety lesson</h2>
+      <p>An overvoltage from a bench supply once destroyed an ESP32 and surged back through USB into a lab PC. Since then I've designed with USB isolation, Schottky diodes to prevent back-feed, and VBUS trace modifications.</p>
+
+      <h2>What's next</h2>
+      <ul>
+        <li>Finish the Altium layout for the ESP32-S3 board</li>
+        <li>Assemble and bring up the V2 PCB</li>
+      </ul>
+    </article>
+
+    <aside class="specs">
+      <h3>Key specs</h3>
+      <dl>
+        <div><dt>MCU</dt><dd>ESP32-S3-WROOM-1U-N8R8</dd></div>
+        <div><dt>Servo driver</dt><dd>PCA9685 · I2C @ 0x40</dd></div>
+        <div><dt>Actuators</dt><dd>5× MG996R</dd></div>
+        <div><dt>Inputs</dt><dd>5× flex sensors (GPIO4–8, ADC1) · OpenCV over USB</dd></div>
+        <div><dt>Power</dt><dd>6V supply · AMS1117 (3.3V logic)</dd></div>
+        <div><dt>USB</dt><dd>USB-C, native USB</dd></div>
+        <div><dt>EDA</dt><dd>Altium Designer (V2) · KiCad (earlier)</dd></div>
+      </dl>
+    </aside>
+  </div>
+
+  <section class="gallery-section">
+    <h2>Gallery</h2>
+    <!-- [TODO] add images/projects/mime-1.jpg (V1), mime-2.jpg (V2 PCB render) and mime-demo.gif (V1 video/GIF), then update the captions. This section stays hidden until the files exist. -->
+    <div class="gallery">
+      <figure><img src="../images/projects/mime-1.jpg" alt="Version 1 of the robotic hand on a breadboard" onerror="this.parentElement.remove()"><figcaption>V1 on a breadboard</figcaption></figure>
+      <figure><img src="../images/projects/mime-demo.gif" alt="Demo of the V1 robotic hand mirroring a human hand" onerror="this.parentElement.remove()"><figcaption>V1 demo</figcaption></figure>
+      <figure><img src="../images/projects/mime-2.jpg" alt="Render of the V2 custom PCB" onerror="this.parentElement.remove()"><figcaption>V2 PCB render</figcaption></figure>
+    </div>
+  </section>
+
+  <nav class="pager" aria-label="More projects">
+    <a href="exoskeleton.html"><small>← Previous</small><strong>Lower-Limb Exoskeleton</strong></a>
+    <a class="next" href="spectrum-analyzer.html"><small>Next →</small><strong>Audio Spectrum Analyzer</strong></a>
+  </nav>
+</main>
+
+<footer><div class="wrap">© <span data-year>2026</span> Luis Lopez Rondon</div></footer>
+
+</body>
+</html>
